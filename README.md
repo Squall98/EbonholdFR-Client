@@ -32,6 +32,7 @@ Pour les joueurs : **pas besoin de Python ni de ligne de commande.**
 Le bouton **« Restaurer l'anglais »** annule tout (une sauvegarde `.bak` est faite automatiquement).
 
 > Pour un jeu **100% français**, installe d'abord le pack de langue **frFR** (gros téléchargement à part). Sans lui, seul le contenu custom du serveur est traduit (le reste du jeu de base reste en anglais). L'installeur te prévient si le pack manque.
+> https://drive.google.com/file/d/1j3OuTz1KMUsuUWXQiMJaE0yQXmAobRxu/view
 
 *(Maintenance : l'exe se régénère avec `installer/build_exe.bat` — voir plus bas.)*
 
@@ -161,4 +162,3 @@ Restent en anglais (impossible à corriger côté client) :
 
 Réalisé par **Squall98**. Projet communautaire **non officiel**, sans affiliation avec Blizzard Entertainment ni Project Ebonhold. Aucun fichier de jeu n'est redistribué. Sous licence MIT (voir `LICENSE`).
 
-> 📖 Tu veux publier ce dépôt sur GitHub ? Suis le guide pas-à-pas : **[COMMENT-PUBLIER.md](COMMENT-PUBLIER.md)**.
