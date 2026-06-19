@@ -31,8 +31,10 @@ Pour les joueurs : **pas besoin de Python ni de ligne de commande.**
 
 Le bouton **« Restaurer l'anglais »** annule tout (une sauvegarde `.bak` est faite automatiquement).
 
-> Pour un jeu **100% français**, installe d'abord le pack de langue **frFR** (gros téléchargement à part). Sans lui, seul le contenu custom du serveur est traduit (le reste du jeu de base reste en anglais). L'installeur te prévient si le pack manque.
-> https://drive.google.com/file/d/1j3OuTz1KMUsuUWXQiMJaE0yQXmAobRxu/view
+> **Pour un jeu 100% français, installe d'abord le pack de langue frFR** (~2,4 Go) :
+> 📥 **[Télécharger le pack frFR (Google Drive)](https://drive.google.com/file/d/1j3OuTz1KMUsuUWXQiMJaE0yQXmAobRxu/view)**
+>
+> Décompresse l'archive et place le dossier **`frFR`** dans le **`Data`** de ton client Ebonhold. Sans ce pack, seul le contenu custom du serveur est traduit (le jeu de base reste en anglais). L'installeur te prévient si le pack manque.
 
 *(Maintenance : l'exe se régénère avec `installer/build_exe.bat` — voir plus bas.)*
 
