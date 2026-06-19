@@ -1,0 +1,20 @@
+# Config perso (chemins locaux) — ne jamais publier
+config.py
+
+# Artefacts de build (DBC extraits du client, liste de travail)
+build/
+
+# Caches Python
+__pycache__/
+*.pyc
+
+# Artefacts de compilation PyInstaller (l'exe se distribue via les Releases GitHub)
+installer/build/
+installer/dist/
+installer/*.spec
+
+# Fichiers de jeu copyrightes (Blizzard / serveur) — ne jamais inclure
+*.MPQ
+*.dbc
+*.rar
+*.zip
