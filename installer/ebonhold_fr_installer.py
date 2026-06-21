@@ -1,17 +1,21 @@
 # -*- coding: utf-8 -*-
-"""EbonholdFR - Installeur (interface graphique).
-L'utilisateur choisit son dossier Ebonhold et clique sur un bouton : la traduction
-francaise est injectee dans les .dbc et la langue passe en frFR. Reversible.
+"""EbonholdFR - Configurateur de langue (interface graphique).
 
-Compilable en .exe (voir build_exe.bat) : aucun Python requis cote utilisateur.
+Methode NON-DESTRUCTIVE : le francais est injecte dans un patch SEPARE 'patch-Z.MPQ'
+qui surcharge patch-5/6 SANS les modifier (compatible launcher, survit aux MAJ serveur).
+
+Profils :
+  - Tout en francais        : pack frFR + patch-Z(colonne frFR) + langue frFR
+  - Jeu anglais + contenu FR : patch-Z(colonne enUS) + langue enUS (PAS besoin du pack)
+  - Anglais (desactiver)     : retire patch-Z + langue enUS
+
+Compilable en .exe (build_exe.bat) : aucun Python requis cote utilisateur.
 """
-import os, sys, json, threading, shutil
+import os, sys, json, threading, shutil, webbrowser
 import tkinter as tk
-from tkinter import ttk, filedialog, messagebox, scrolledtext
+from tkinter import filedialog, messagebox, scrolledtext
 
-# ------------------------------------------------------------------ ressources
 def resource(rel):
-    """Chemin d'une ressource embarquee (marche en dev ET compile PyInstaller)."""
     base = getattr(sys, "_MEIPASS", None)
     if base:
         return os.path.join(base, rel)
@@ -19,11 +23,12 @@ def resource(rel):
 
 sys.path.insert(0, resource("tools"))
 import mpqwrite, dbc_localize  # noqa: E402
+import mpyq  # noqa: E402
 
 STORE_PATH = resource("data/custom_translations.json")
+PACK_URL = "https://drive.google.com/file/d/1j3OuTz1KMUsuUWXQiMJaE0yQXmAobRxu/view"
 FR_MPQS = ["patch-frFR-3.MPQ", "patch-frFR-2.MPQ", "patch-frFR.MPQ", "locale-frFR.MPQ"]
 TEXT_PATCHES = ["patch-5.MPQ", "patch-6.MPQ"]
-DOWNLOAD_URL = "https://forum.warmane.com/showthread.php?t=388077"  # pack frFR (dossier frFR)
 
 # ------------------------------------------------------------------ logique
 def load_tr():
@@ -34,30 +39,22 @@ def load_tr():
     return tr
 
 def find_ebonhold():
-    """Cherche une install Ebonhold (dossier contenant Data\\patch-5.MPQ)."""
-    cands = []
     for drive in "CDEFGH":
-        for sub in (r"\ebonhold\Ebonhold", r"\ebonhold-FR", r"\Ebonhold",
-                    r"\Games\Ebonhold", r"\Program Files\Ebonhold",
-                    r"\Program Files (x86)\Ebonhold"):
-            cands.append(drive + ":" + sub)
-    for c in cands:
-        if os.path.exists(os.path.join(c, "Data", "patch-5.MPQ")):
-            return c
+        for sub in (r"\ebonhold\Ebonhold", r"\Ebonhold", r"\Games\Ebonhold",
+                    r"\Program Files\Ebonhold", r"\Program Files (x86)\Ebonhold"):
+            p = drive + ":" + sub
+            if os.path.exists(os.path.join(p, "Data", "patch-5.MPQ")):
+                return p
     return ""
 
-def has_frfr(data_dir):
+def has_pack(data_dir):
     return os.path.exists(os.path.join(data_dir, "frFR", "locale-frFR.MPQ"))
-
-def import_mpq(p):
-    import mpyq
-    return mpyq.MPQArchive(p)
 
 def set_locale(install_dir, locale):
     cfg = os.path.join(install_dir, "WTF", "Config.wtf")
-    if not os.path.exists(cfg):
-        return False
-    lines = open(cfg, encoding="latin-1").read().splitlines()
+    lines = []
+    if os.path.exists(cfg):
+        lines = open(cfg, encoding="latin-1").read().splitlines()
     out, found = [], False
     for ln in lines:
         if ln.strip().upper().startswith("SET LOCALE"):
@@ -66,22 +63,26 @@ def set_locale(install_dir, locale):
             out.append(ln)
     if not found:
         out.insert(0, 'SET locale "%s"' % locale)
+    os.makedirs(os.path.dirname(cfg), exist_ok=True)
     open(cfg, "w", encoding="latin-1").write("\n".join(out) + "\n")
-    return True
 
-def apply_fr(install_dir, log):
-    import mpyq
-    data_dir = os.path.join(install_dir, "Data")
+def fix_realmlist(data_dir):
+    """Aligne le realmlist du pack frFR sur celui du client (Ebonhold)."""
+    en = os.path.join(data_dir, "enUS", "realmlist.wtf")
+    fr = os.path.join(data_dir, "frFR", "realmlist.wtf")
+    if os.path.exists(en) and os.path.isdir(os.path.dirname(fr)):
+        shutil.copy2(en, fr)
+
+def build_patchz(data_dir, fr_col, log):
+    """Construit patch-Z.MPQ (FR injecte) sans toucher patch-5/6."""
     tr = load_tr()
-    log("Traductions chargees : %d" % len(tr))
-
+    log("Traductions : %d" % len(tr))
     fr_arch = []
     for m in FR_MPQS:
-        fp = os.path.join(data_dir, "frFR", m)
-        if os.path.exists(fp):
-            try: fr_arch.append(mpyq.MPQArchive(fp, listfile=False))
+        p = os.path.join(data_dir, "frFR", m)
+        if os.path.exists(p):
+            try: fr_arch.append(mpyq.MPQArchive(p, listfile=False))
             except Exception: pass
-
     def find_base(path):
         for a in fr_arch:
             try:
@@ -89,112 +90,127 @@ def apply_fr(install_dir, log):
                 if d: return d
             except Exception: pass
         return None
-
+    patchz = {}
     for patch in TEXT_PATCHES:
-        dp = os.path.join(data_dir, patch)
-        if not os.path.exists(dp):
-            log("  (%s introuvable, ignore)" % patch); continue
-        bak = dp + ".bak"
-        if not os.path.exists(bak):
-            shutil.copy2(dp, bak); log("  sauvegarde %s.bak creee" % patch)
-        src = bak  # on lit toujours la version d'origine (anglaise) comme source
-        a = mpyq.MPQArchive(src)
+        sp = os.path.join(data_dir, patch)
+        if not os.path.exists(sp):
+            continue
+        a = mpyq.MPQArchive(sp)
         names = [n for n in a.read_file("(listfile)").decode("latin-1")
                  .replace("\r\n", "\n").split("\n") if n.strip()]
-        out = {}
         for n in names:
-            raw = a.read_file(n)
             if not n.lower().endswith(".dbc"):
-                out[n] = raw; continue
+                continue
+            raw = a.read_file(n)
             base = find_base(n)
             try:
-                merged, st = dbc_localize.merge(raw, base, tr)
+                merged, st = dbc_localize.merge(raw, base, tr, fr_col=fr_col)
             except Exception:
                 merged = None
-            out[n] = merged if merged else raw
-        mpqwrite.create_mpq(dp, out)
-        log("  %s traduit." % patch)
+            if merged:
+                patchz[n] = merged
+    out = os.path.join(data_dir, "patch-Z.MPQ")
+    mpqwrite.create_mpq(out, patchz)
+    log("patch-Z.MPQ ecrit (%d DBC)." % len(patchz))
 
-    set_locale(install_dir, "frFR")
-    log("Langue du jeu : francais (frFR).")
+def remove_patchz(data_dir):
+    p = os.path.join(data_dir, "patch-Z.MPQ")
+    if os.path.exists(p):
+        os.remove(p)
 
-def restore_en(install_dir, log):
-    data_dir = os.path.join(install_dir, "Data")
-    for patch in TEXT_PATCHES:
-        dp = os.path.join(data_dir, patch)
-        bak = dp + ".bak"
-        if os.path.exists(bak):
-            shutil.copy2(bak, dp); log("  %s restaure (anglais)." % patch)
-    set_locale(install_dir, "enUS")
-    log("Langue du jeu : anglais (enUS).")
+# Profils -> action
+def apply_profile(install_dir, profile, log):
+    data = os.path.join(install_dir, "Data")
+    if profile == "full":
+        fix_realmlist(data)
+        build_patchz(data, fr_col=2, log=log)   # FR dans la colonne frFR
+        set_locale(install_dir, "frFR")
+        log("Profil : TOUT EN FRANCAIS applique.")
+    elif profile == "content":
+        build_patchz(data, fr_col=0, log=log)    # FR dans la colonne enUS
+        set_locale(install_dir, "enUS")
+        log("Profil : JEU ANGLAIS + CONTENU FRANCAIS applique.")
+    elif profile == "english":
+        remove_patchz(data)
+        set_locale(install_dir, "enUS")
+        log("Profil : ANGLAIS (francais desactive).")
 
 # ------------------------------------------------------------------ interface
 class App(tk.Tk):
+    PROFILES = [
+        ("full",    "Tout en francais  (recommande - necessite le pack frFR)"),
+        ("content", "Jeu en anglais + sorts/echoes en francais  (sans pack)"),
+        ("english", "Anglais  (desactiver le francais)"),
+    ]
+
     def __init__(self):
         super().__init__()
-        self.title("EbonholdFR - Traduction francaise")
-        self.geometry("640x520")
-        self.resizable(False, False)
+        self.title("EbonholdFR - Configurateur de langue")
+        self.geometry("660x560"); self.resizable(False, False)
 
-        tk.Label(self, text="Ebonhold en francais", font=("Segoe UI", 16, "bold")).pack(pady=(14, 2))
-        tk.Label(self, text="Choisis ton dossier Ebonhold, puis clique sur le bouton.",
-                 font=("Segoe UI", 9)).pack()
+        tk.Label(self, text="Ebonhold - Langue", font=("Segoe UI", 16, "bold")).pack(pady=(14, 0))
+        tk.Label(self, text="Choisis ton dossier Ebonhold, un profil, puis applique.",
+                 font=("Segoe UI", 9)).pack(pady=(0, 8))
 
-        frm = tk.Frame(self); frm.pack(fill="x", padx=16, pady=10)
+        frm = tk.Frame(self); frm.pack(fill="x", padx=16)
         self.path_var = tk.StringVar(value=find_ebonhold())
         tk.Entry(frm, textvariable=self.path_var).pack(side="left", fill="x", expand=True, ipady=3)
         tk.Button(frm, text="Parcourir...", command=self.browse).pack(side="left", padx=(6, 0))
 
-        self.btn = tk.Button(self, text="  Mettre Ebonhold en francais  ",
-                             font=("Segoe UI", 12, "bold"), bg="#2e7d32", fg="white",
-                             activebackground="#1b5e20", activeforeground="white",
-                             command=lambda: self.run(apply_fr))
-        self.btn.pack(pady=(4, 4), ipady=6)
-        self.btn_restore = tk.Button(self, text="Restaurer l'anglais",
-                                     command=lambda: self.run(restore_en))
-        self.btn_restore.pack()
+        box = tk.LabelFrame(self, text=" Profil de langue ", font=("Segoe UI", 10, "bold"))
+        box.pack(fill="x", padx=16, pady=10)
+        self.profile = tk.StringVar(value="full")
+        for val, label in self.PROFILES:
+            tk.Radiobutton(box, text=label, variable=self.profile, value=val,
+                           font=("Segoe UI", 10), anchor="w").pack(fill="x", padx=8, pady=2)
 
-        self.log = scrolledtext.ScrolledText(self, height=16, font=("Consolas", 9),
+        self.btn = tk.Button(self, text="  Appliquer  ", font=("Segoe UI", 12, "bold"),
+                             bg="#2e7d32", fg="white", activebackground="#1b5e20",
+                             activeforeground="white", command=self.run)
+        self.btn.pack(pady=4, ipady=6)
+
+        self.log = scrolledtext.ScrolledText(self, height=15, font=("Consolas", 9),
                                              state="disabled", bg="#1e1e1e", fg="#d4d4d4")
-        self.log.pack(fill="both", expand=True, padx=16, pady=12)
-        self._log("Pret. Selectionne ton dossier Ebonhold (celui qui contient Wow.exe).")
+        self.log.pack(fill="both", expand=True, padx=16, pady=10)
+        self._log("Pret. Le jeu doit etre FERME pendant l'operation.")
 
-    def _log(self, msg):
-        self.log.configure(state="normal")
-        self.log.insert("end", msg + "\n"); self.log.see("end")
-        self.log.configure(state="disabled"); self.update_idletasks()
+    def _log(self, m):
+        self.log.configure(state="normal"); self.log.insert("end", m + "\n")
+        self.log.see("end"); self.log.configure(state="disabled"); self.update_idletasks()
 
     def browse(self):
-        d = filedialog.askdirectory(title="Selectionne ton dossier Ebonhold")
+        d = filedialog.askdirectory(title="Dossier Ebonhold")
         if d: self.path_var.set(d)
 
-    def run(self, func):
+    def run(self):
         install = self.path_var.get().strip()
-        if not os.path.exists(os.path.join(install, "Data", "patch-5.MPQ")):
+        data = os.path.join(install, "Data")
+        if not os.path.exists(os.path.join(data, "patch-5.MPQ")):
             messagebox.showerror("Dossier invalide",
-                "Ce dossier n'est pas une installation Ebonhold.\n"
-                "Choisis le dossier qui contient Wow.exe et le dossier Data.")
+                "Choisis le dossier Ebonhold (celui qui contient Wow.exe et le dossier Data).")
             return
-        if func is apply_fr and not has_frfr(os.path.join(install, "Data")):
-            if not messagebox.askyesno("Pack francais manquant",
-                "Les fichiers de langue francaise (frFR) ne sont pas installes.\n\n"
-                "Le jeu de base restera en anglais (seul le contenu custom sera traduit).\n"
-                "Pour un jeu 100%% francais, installe d'abord le pack frFR :\n%s\n\n"
-                "Continuer quand meme ?" % DOWNLOAD_URL):
-                return
-        self.btn.configure(state="disabled"); self.btn_restore.configure(state="disabled")
+        prof = self.profile.get()
+        if prof == "full" and not has_pack(data):
+            if messagebox.askyesno("Pack frFR manquant",
+                "Le profil 'Tout en francais' a besoin du pack de langue frFR (~2,4 Go),\n"
+                "qui n'est pas installe.\n\n"
+                "Veux-tu ouvrir la page de telechargement ?\n"
+                "(Decompresse l'archive et place le dossier 'frFR' dans le dossier Data,\n"
+                " puis relance ce configurateur.)"):
+                webbrowser.open(PACK_URL)
+            return
+        self.btn.configure(state="disabled")
         def worker():
             try:
-                func(install, self._log)
-                self._log("\nTERMINE ! Lance le jeu depuis ce dossier.")
-                messagebox.showinfo("Termine", "C'est fait ! Lance Wow.exe depuis ce dossier.")
+                apply_profile(install, prof, self._log)
+                self._log("\nTERMINE ! Lance Wow.exe depuis ce dossier.")
+                messagebox.showinfo("Termine", "C'est fait ! Lance le jeu pour voir le resultat.")
             except Exception as e:
                 self._log("\nERREUR : %s" % e)
                 messagebox.showerror("Erreur",
-                    "Une erreur est survenue :\n%s\n\n"
-                    "Verifie que le jeu est bien FERME, puis reessaie." % e)
+                    "Erreur : %s\n\nVerifie que le jeu est bien FERME, puis reessaie." % e)
             finally:
-                self.btn.configure(state="normal"); self.btn_restore.configure(state="normal")
+                self.btn.configure(state="normal")
         threading.Thread(target=worker, daemon=True).start()
 
 if __name__ == "__main__":

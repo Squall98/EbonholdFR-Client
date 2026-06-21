@@ -60,7 +60,7 @@ def detect_blocks(buf, base_buf=None):
             blocks.append(fi); last = fi
     return blocks, parse(buf)
 
-def merge(custom_buf, base_buf, tr=None):
+def merge(custom_buf, base_buf, tr=None, fr_col=2):
     """Retourne (new_dbc_bytes, stats). Priorite frFR : tr (trad manuelle, cle=texte EN)
     > texte FR de base (par id=champ0) > recopie de l'anglais. tr = dict {str_EN: str_FR}."""
     blocks, (rc, fc, rs, sbs, rec_off, cblock) = detect_blocks(custom_buf, base_buf)
@@ -111,8 +111,11 @@ def merge(custom_buf, base_buf, tr=None):
                 frbytes = en
             for k in range(16):
                 rec[b0+k] = 0
-            rec[b0+0] = intern(en)
-            rec[b0+2] = intern(frbytes)
+            if fr_col == 0:
+                rec[b0+0] = intern(frbytes)   # français dans la colonne enUS (client anglais, sans pack frFR)
+            else:
+                rec[b0+0] = intern(en)
+                rec[b0+fr_col] = intern(frbytes)
         if src == "tr": st_tr += 1
         elif src == "base": st_base += 1
         else: st_copy += 1
@@ -125,4 +128,4 @@ def merge(custom_buf, base_buf, tr=None):
     return bytes(out), {"blocks": blocks, "records": rc, "from_tr": st_tr, "from_base": st_base, "copied_en": st_copy, "strblock": len(pool)}
 
 
-# Module utilitaire : importe-le depuis rebuild_all.py. Pas de point d'entree direct.
+# Module utilitaire : importe-le depuis l'installeur / rebuild_all.py. Pas de point d'entree direct.
