@@ -70,6 +70,24 @@ def remove_patchz(data_dir):
     if os.path.exists(p):
         os.remove(p)
 
+def deploy_addon(install_dir, log):
+    """Installe l'addon compagnon EbonholdFRFix dans Interface\\AddOns.
+    Il reactive les interfaces custom (forge...) quand un PNJ s'affiche avec son nom
+    francais. Purement additif, sans effet en anglais. Place hors de Data\\ -> le
+    launcher n'y touche pas (survit aux mises a jour serveur)."""
+    src = resource(os.path.join("addon", "EbonholdFRFix"))
+    if not os.path.isdir(src):
+        return
+    dst = os.path.join(install_dir, "Interface", "AddOns", "EbonholdFRFix")
+    try:
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
+        if os.path.isdir(dst):
+            shutil.rmtree(dst, ignore_errors=True)
+        shutil.copytree(src, dst)
+        log("Addon EbonholdFRFix installe (forge custom OK en francais).")
+    except Exception as e:
+        log("Addon non installe (%s)." % e)
+
 # Fichiers de voix : nom frFR <- source enUS
 SPEECH = [
     ("speech-frFR.MPQ", "speech-enUS.MPQ"),
@@ -159,6 +177,7 @@ def apply_config(install_dir, base_fr, voices_fr, spells_fr, other_fr, log):
         fix_realmlist(data)
         manage_voices(data, voices_fr, log)   # voix gerables seulement en jeu FR
     build_patchz(data, base_fr, spells_fr, other_fr, log)
+    deploy_addon(install_dir, log)         # corrige les interfaces custom en jeu FR
     set_locale(install_dir, "frFR" if base_fr else "enUS")
     log("Jeu=%s  Voix=%s  Sorts=%s  Reput=%s." %
         ("FR" if base_fr else "EN", "FR" if voices_fr else "EN",

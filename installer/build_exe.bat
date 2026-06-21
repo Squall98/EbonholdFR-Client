@@ -6,6 +6,7 @@ pyinstaller --noconfirm --onefile --windowed --name "EbonholdFR-Installer" ^
   --icon "icone\app.ico" ^
   --paths "..\tools" ^
   --add-data "..\data\custom_translations.json;data" ^
+  --add-data "..\addon\EbonholdFRFix;addon\EbonholdFRFix" ^
   --add-data "..\tools\mpqwrite.py;tools" ^
   --add-data "..\tools\dbc_localize.py;tools" ^
   --hidden-import mpqwrite --hidden-import dbc_localize --hidden-import mpyq ^
