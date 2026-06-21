@@ -115,10 +115,22 @@ EbonholdFR-Client/
 
 ---
 
+## Interfaces custom en jeu français
+
+Certaines interfaces custom d'Ebonhold (la **forge** / extraction d'affixes…) ne s'ouvraient pas
+quand le jeu était en français : l'addon du serveur ne reconnaît que le **nom anglais** du PNJ.
+L'installateur déploie donc un petit addon compagnon **`EbonholdFRFix`** dans `Interface\AddOns\`
+(hors de `Data\`, donc **à l'épreuve des mises à jour**) qui ré-ouvre la bonne fenêtre quand il
+voit le nom **français**. Purement additif, sans effet sur un client anglais.
+Le **texte interne** de ces fenêtres reste en anglais (codé en dur dans l'addon d'Ebonhold).
+
+---
+
 ## Limites
 
 - **Noms d'objets / quêtes / PNJ custom** : envoyés par le serveur, pas dans un `.dbc` → restent en anglais.
 - **Noms** des sorts/echoes custom : laissés en anglais (cohérence avec les guides) ; seules les **descriptions** sont traduites.
+- **Texte interne** des interfaces custom (forge…) : codé en dur en anglais côté Ebonhold → non traduit (l'interface s'ouvre et fonctionne, cf. ci-dessus).
 
 ---
 

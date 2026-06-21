@@ -1,5 +1,14 @@
 # Changelog
 
+## v2.1 — fix interfaces custom en jeu français
+- **Addon compagnon `EbonholdFRFix`** déployé automatiquement par l'installateur
+  dans `Interface\AddOns\` (hors de `Data\` → **survit aux mises à jour** serveur).
+- Corrige la **forge (Enclume enchantée / extraction d'affixes)** qui ne s'ouvrait pas
+  en français : l'addon d'Ebonhold ne reconnaissait que le nom **anglais** du PNJ.
+  L'addon compagnon re-déclenche l'interface quand il voit le nom **français**.
+- Purement additif : aucun fichier d'Ebonhold modifié, aucun effet sur un client anglais.
+- Commande `/frfix` (diagnostic) pour capturer le nom FR d'un PNJ custom.
+
 ## v2.0 — méthode patch-Z (non-destructive) + configurateur
 - **Nouvelle méthode** : le français est injecté dans un patch **séparé** `patch-Z.MPQ`
   qui surcharge `patch-5/6` **sans les modifier**.
