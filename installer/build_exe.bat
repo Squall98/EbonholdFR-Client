@@ -3,6 +3,7 @@ REM Compile l'installeur en un seul .exe autonome (aucun Python requis cote util
 REM Prerequis (machine de build uniquement) : pip install pyinstaller mpyq
 cd /d "%~dp0"
 pyinstaller --noconfirm --onefile --windowed --name "EbonholdFR-Installer" ^
+  --icon "icone\app.ico" ^
   --paths "..\tools" ^
   --add-data "..\data\custom_translations.json;data" ^
   --add-data "..\tools\mpqwrite.py;tools" ^

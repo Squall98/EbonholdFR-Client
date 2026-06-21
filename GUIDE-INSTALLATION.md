@@ -41,8 +41,10 @@ Il y a **deux façons** de faire, choisis la tienne :
    - Si Windows affiche un écran bleu **« Windows a protégé votre ordinateur »** :
      clique sur **« Informations complémentaires »** puis **« Exécuter quand même »**. *(C'est normal, le programme n'est pas signé.)*
 4. Le dossier Ebonhold est souvent **détecté tout seul** ; sinon clique **Parcourir** et sélectionne-le.
-5. Choisis le profil **« Tout en français »**.
+5. Clique sur le bouton **« Tout en français »** (ou règle chaque catégorie à la main : Jeu, Voix, Sorts, Réputations).
 6. Clique sur **Appliquer** et attends le message **Terminé**.
+
+> 💡 Tu peux mélanger : par ex. **Jeu = Français** mais **Voix = Anglais** pour avoir le texte en français et les doublages en anglais.
 
 ### Étape 5 : Jouer
 
@@ -55,7 +57,7 @@ Lance le jeu normalement. **C'est en français !** 🎉
 1. Télécharge **`EbonholdFR-Installer.exe`** : **https://github.com/Squall98/EbonholdFR-Client/releases**
 2. **Ferme le jeu**, double-clique sur l'exe (si écran bleu : *Informations complémentaires → Exécuter quand même*).
 3. Sélectionne ton dossier Ebonhold (souvent détecté tout seul).
-4. Choisis le profil **« Jeu en anglais + contenu en français »**.
+4. Règle : **Jeu = Anglais**, **Sorts = Français** (et Réputations = Français si tu veux).
 5. **Appliquer** → lance le jeu. Les sorts, echoes et factions sont en français, le reste en anglais.
 
 ---
