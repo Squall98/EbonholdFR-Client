@@ -1,4 +1,14 @@
-# EbonholdFR — Client (traduction française)
+<p align="center">
+  <img src="assets/logo.png" width="300" alt="EbonholdFR">
+</p>
+
+<h1 align="center">EbonholdFR — Client (traduction française)</h1>
+
+<p align="center">
+  <a href="https://github.com/Squall98/EbonholdFR-Client/releases/latest"><img src="https://img.shields.io/github/v/release/Squall98/EbonholdFR-Client?label=t%C3%A9l%C3%A9charger&color=2e7d32" alt="Release"></a>
+  <img src="https://img.shields.io/badge/WoW-3.3.5a-blue" alt="WoW 3.3.5a">
+  <img src="https://img.shields.io/badge/licence-MIT-lightgrey" alt="MIT">
+</p>
 
 Met le client **Project Ebonhold** (World of Warcraft 3.3.5a, rogue-lite) **en français** : sorts, talents, echoes, factions, compétences, hauts faits, titres… et le jeu de base (menus, quêtes, zones) avec le pack de langue.
 
