@@ -1,120 +1,70 @@
 # EbonholdFR — Client (traduction française)
 
-Rend le client **Project Ebonhold** (World of Warcraft 3.3.5a, rogue-lite) **entièrement en français** : sorts, talents, echoes, factions, compétences, hauts faits, titres… y compris le contenu custom du serveur.
+Met le client **Project Ebonhold** (World of Warcraft 3.3.5a, rogue-lite) **en français** : sorts, talents, echoes, factions, compétences, hauts faits, titres… et le jeu de base (menus, quêtes, zones) avec le pack de langue.
 
-> ℹ️ Complémentaire de l'addon **EbonholdFR** (qui traduit les descriptions d'echoes via les info-bulles). Ici on traduit le **client lui-même**, au niveau des fichiers de données.
-
----
-
-## Pourquoi c'est nécessaire
-
-Ebonhold est conçu pour le client **anglais (enUS)**. Si on installe un client **français (frFR)**, le jeu de base passe bien en français, **mais tout le contenu custom du serveur reste vide** : le serveur n'a rempli que la colonne anglaise de ses fichiers de données (`.dbc`), et le client français lit la colonne française… vide.
-
-Ce projet **injecte des traductions françaises dans la colonne française des `.dbc`**, par ordre de priorité :
-
-1. **nos traductions** (`data/custom_translations.json`) — contenu custom : sorts, echoes…
-2. sinon le **texte français de base de Blizzard** — sorts/objets standard ;
-3. sinon l'**anglais recopié** — pour ne jamais laisser de texte vide.
-
-Résultat : un client Ebonhold quasi 100% en français.
+Méthode **non-destructive** : le français est injecté dans un patch **séparé** (`patch-Z.MPQ`) qui surcharge les fichiers du serveur **sans les modifier**. → compatible launcher, **survit aux mises à jour** du serveur, switch FR/EN instantané.
 
 ---
 
-## 🟢 Méthode simple (recommandée) — l'installeur
+## 🟢 Installation (l'exe, sans Python)
 
-Pour les joueurs : **pas besoin de Python ni de ligne de commande.**
+1. Télécharge **`EbonholdFR-Installer.exe`** (dans les *Releases*).
+2. **Ferme le jeu**, puis double-clique sur l'exe.
+3. Choisis ton dossier Ebonhold (celui qui contient `Wow.exe`) — souvent détecté tout seul.
+4. Choisis un **profil de langue** (voir ci-dessous) et clique sur **Appliquer**.
+5. Lance le jeu.
 
-1. Télécharge **`EbonholdFR-Installer.exe`** (dans les *Releases* GitHub).
-2. Double-clique dessus.
-3. Choisis ton dossier Ebonhold (celui qui contient `Wow.exe`) — il est souvent détecté tout seul.
-4. Clique sur **« Mettre Ebonhold en français »**. C'est tout.
+> ⚠️ Windows peut afficher un avertissement bleu (« Windows a protégé votre ordinateur ») pour un programme non signé : clique sur **Informations complémentaires → Exécuter quand même**.
 
-Le bouton **« Restaurer l'anglais »** annule tout (une sauvegarde `.bak` est faite automatiquement).
+### Les profils
 
-> **Pour un jeu 100% français, installe d'abord le pack de langue frFR** (~2,4 Go) :
-> 📥 **[Télécharger le pack frFR (Google Drive)](https://drive.google.com/file/d/1j3OuTz1KMUsuUWXQiMJaE0yQXmAobRxu/view)**
->
-> Décompresse l'archive et place le dossier **`frFR`** dans le **`Data`** de ton client Ebonhold. Sans ce pack, seul le contenu custom du serveur est traduit (le jeu de base reste en anglais). L'installeur te prévient si le pack manque.
+| Profil | Menus / Quêtes / Voix | Sorts / Echoes / Factions | Pack frFR requis |
+|---|---|---|---|
+| **Tout en français** | 🇫🇷 français | 🇫🇷 français | **oui** (~2,4 Go) |
+| **Jeu anglais + contenu français** | 🇬🇧 anglais | 🇫🇷 français | non |
+| **Anglais** (désactiver) | 🇬🇧 anglais | 🇬🇧 anglais | — |
 
-*(Maintenance : l'exe se régénère avec `installer/build_exe.bat` — voir plus bas.)*
+Le profil **Tout en français** a besoin du **pack de langue frFR** (le jeu de base — menus, quêtes, voix — vit dans ce pack). L'installeur te prévient s'il manque et ouvre la page de téléchargement.
 
----
-
-## Méthode manuelle (scripts) — pour développeurs
-
-### Prérequis
-
-- Une **copie française** de ton client Ebonhold (locale `frFR` installée), **séparée** de ton install d'origine (qui reste intacte comme filet de sécurité).
-- **Python 3** avec **mpyq** : `pip install mpyq`
-- Le client doit être **fermé** pendant la reconstruction (sinon les fichiers sont verrouillés).
-
-Ce dépôt ne fournit **aucun fichier de jeu** : tu utilises ta propre installation.
+📥 **Pack frFR** : [Télécharger (Google Drive)](https://drive.google.com/file/d/1j3OuTz1KMUsuUWXQiMJaE0yQXmAobRxu/view) — décompresse l'archive et place le dossier **`frFR`** dans le **`Data`** de ton client, puis relance l'installeur.
 
 ---
 
-## Installation
+## Pourquoi ça marche (et pourquoi c'est solide)
 
-```bash
-git clone <ce-depot>
-cd EbonholdFR-Client
-pip install mpyq
-cp config.example.py config.py      # puis édite config.py
-```
+Ebonhold remplit seulement la colonne **anglaise** de ses fichiers de données (`.dbc`). On y injecte le français par-dessus, mais **dans un patch séparé** :
 
-Dans **`config.py`**, renseigne :
+- `patch-Z.MPQ` est chargé par le client **après** `patch-5/6` et les **surcharge** — sans toucher aux originaux.
+- Donc le launcher ne voit **aucun fichier modifié** → pas d'erreur « not up to date », et le français **survit aux mises à jour** du serveur.
+- Le **switch FR/EN** revient juste à ajouter/retirer `patch-Z` + changer la langue.
 
-- `SRC_DATA` → dossier `Data` de ton client **original** (anglais, tenu à jour par le launcher) ;
-- `DST_DATA` → dossier `Data` de ta **copie française**.
-
----
-
-## Utilisation
-
-```bash
-cd tools
-python extract_base_dbc.py     # extrait les Spell.dbc de référence (dans build/)
-python rebuild_all.py          # injecte le français et réécrit les patchs FR
-```
-
-Lance le jeu depuis ta copie française : c'est en français. 🇫🇷
+Priorité des textes : **nos traductions** (custom) > **français de base Blizzard** (pack) > anglais.
 
 ---
 
 ## Mettre à jour après un patch du serveur
 
-1. Laisse le launcher mettre à jour ton client original (`SRC_DATA`).
-2. **Ferme le jeu**, puis :
-
-```bash
-cd tools
-python extract_base_dbc.py
-python rebuild_all.py                 # ré-applique toutes les traductions existantes
-python extract_custom_spells.py       # liste les NOUVEAUX textes à traduire (s'il y en a)
-python auto_translate.py              # traduit automatiquement montures/tomes/motifs simples
-```
-
-3. S'il reste des entrées dans la liste, ajoute-les à `data/custom_translations.json`
-   (clé = texte **anglais** → valeur = traduction **française**), puis relance `rebuild_all.py`.
+1. Lance le **launcher officiel** d'Ebonhold pour mettre à jour le jeu.
+2. **Relance l'installeur** et clique sur **Appliquer** (il reconstruit `patch-Z` à partir des nouveaux fichiers).
 
 ---
 
-## Ajouter ou corriger une traduction
+## Pour les développeurs (méthode manuelle)
 
-Tout vit dans **`data/custom_translations.json`** :
+Prérequis : **Python 3** + **mpyq** (`pip install mpyq`).
 
-```json
-{
-  "names": { },
-  "descs": {
-    "Dash a short distance forward.": "Bondit sur une courte distance vers l'avant."
-  }
-}
+```bash
+cp config.example.py config.py     # renseigne SRC_DATA / DST_DATA (= le Data de ton client)
+cd tools
+python extract_base_dbc.py         # extrait les Spell.dbc de référence
+python build_patchz.py             # construit patch-Z.MPQ (FR), sans toucher patch-5/6
 ```
 
-- Clé = texte anglais **exact** (avec les codes `$s1`, `$d`, `${...}` tels quels) ;
-- Valeur = traduction française (les codes `$...` calculent les chiffres en jeu, à **préserver**).
+`build_patchz.py` accepte la colonne cible : `frFR` (jeu en français, avec pack) ou `enUS` (jeu anglais + contenu FR, sans pack).
 
-Puis : `python rebuild_all.py`.
+### Ajouter / corriger une traduction
+
+Tout vit dans **`data/custom_translations.json`** (clé = texte anglais **exact**, valeur = français ; préserve les codes `$s1`, `$d`, `${...}`). Puis relance `build_patchz.py`.
 
 ---
 
@@ -122,45 +72,41 @@ Puis : `python rebuild_all.py`.
 
 ```
 EbonholdFR-Client/
-├── installer/                # outil grand public
-│   ├── ebonhold_fr_installer.py   # interface graphique (choix dossier + 1 bouton)
-│   └── build_exe.bat              # compile l'exe autonome (PyInstaller)
-├── config.example.py         # modèle de config (→ config.py, ignoré par git)
-├── data/
-│   └── custom_translations.json   # LE fichier central des traductions (EN → FR)
+├── installer/
+│   ├── ebonhold_fr_installer.py   # configurateur (interface + profils)
+│   └── build_exe.bat              # compile l'exe autonome
+├── data/custom_translations.json  # LES traductions (EN → FR)
 ├── tools/
-│   ├── rebuild_all.py        # script principal : reconstruit le client FR
-│   ├── extract_base_dbc.py   # extrait les Spell.dbc de référence
-│   ├── extract_custom_spells.py  # liste ce qui reste à traduire
-│   ├── auto_translate.py     # traduit montures/tomes/motifs par règles
-│   ├── dbc_localize.py       # moteur de fusion .dbc (détection colonnes + merge)
-│   └── mpqwrite.py           # créateur d'archive MPQ en Python pur
-├── build/                    # artefacts générés (ignoré par git)
-├── LICENSE
-└── CHANGELOG.md
+│   ├── dbc_localize.py            # moteur de fusion .dbc (colonne enUS ou frFR)
+│   ├── mpqwrite.py                # créateur d'archive MPQ en Python pur
+│   ├── build_patchz.py            # construit patch-Z.MPQ
+│   ├── extract_base_dbc.py        # extrait les DBC de référence
+│   ├── extract_custom_spells.py   # liste ce qui reste à traduire
+│   └── auto_translate.py          # traductions par motifs (montures, tomes…)
+├── COMMENT-PUBLIER.md             # guide GitHub pas-à-pas
+├── LICENSE  ·  CHANGELOG.md
 ```
 
 ---
 
 ## Détails techniques
 
-- **Format `.dbc`** : WotLK 3.3.5a (WDBC). Colonnes localisées détectées automatiquement ; le français s'écrit dans le slot `frFR` (index +2 du bloc localisé).
-- **Encodage** : **UTF-8** (le client Ebonhold attend de l'UTF-8 — pas du cp1252).
-- **MPQ** : `mpqwrite.py` crée des archives MPQ v1 (secteurs compressés zlib) lisibles par le client 3.3.5a, sans dépendance externe (ni StormLib ni MPQ Editor).
-- **Patchs traités** : `patch-5.MPQ` (Spell.dbc + DBC de sorts) et `patch-6.MPQ` (Faction, SkillLine, Achievement, CharTitles…). Une sauvegarde `.bak` est créée à la première écriture.
+- **`.dbc`** WotLK 3.3.5a (WDBC). Colonnes localisées détectées automatiquement ; français écrit dans le slot **frFR** (`+2`) ou **enUS** (`+0`) selon le profil.
+- **Encodage UTF-8** (le client Ebonhold — y compris en anglais — affiche bien les accents UTF-8).
+- **MPQ** : `mpqwrite.py` crée des archives MPQ v1 (secteurs zlib) lisibles par le client 3.3.5a, sans dépendance externe.
+- **`patch-Z.MPQ`** : patch racine chargé après `patch-5/6`, qu'il surcharge sans les modifier.
 
 ---
 
 ## Limites
 
-Restent en anglais (impossible à corriger côté client) :
-
-- **noms d'objets, de quêtes et de PNJ custom** : envoyés dynamiquement par le serveur (cache `WDB`), pas stockés dans un `.dbc` ;
-- **noms** des sorts/echoes custom : volontairement laissés en anglais (cohérence avec les guides et la communauté) ; seules les **descriptions** sont traduites.
+- **Noms d'objets / quêtes / PNJ custom** : envoyés par le serveur, pas dans un `.dbc` → restent en anglais.
+- **Noms** des sorts/echoes custom : laissés en anglais (cohérence avec les guides) ; seules les **descriptions** sont traduites.
 
 ---
 
 ## Crédits & avertissement
 
-Réalisé par **Squall98**. Projet communautaire **non officiel**, sans affiliation avec Blizzard Entertainment ni Project Ebonhold. Aucun fichier de jeu n'est redistribué. Sous licence MIT (voir `LICENSE`).
+Réalisé par **Squall98**. Projet communautaire **non officiel**, sans affiliation avec Blizzard Entertainment ni Project Ebonhold. Aucun fichier de jeu n'est redistribué. Sous licence MIT.
 
+> 📖 Pour publier/mettre à jour ce dépôt sur GitHub : **[COMMENT-PUBLIER.md](COMMENT-PUBLIER.md)**.
