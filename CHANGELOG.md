@@ -1,5 +1,14 @@
 # Changelog
 
+## v2.2 — réparation auto après mise à jour serveur + notif de version
+- **Réparation en 1 clic** : au lancement, si le patch FR a été **effacé par une mise à jour
+  du serveur** (le launcher supprime `patch-Z.MPQ`), l'installateur le détecte et affiche
+  **« Réparer maintenant »** — un clic remet le français (tes derniers réglages sont mémorisés).
+- **Réglages mémorisés** : l'installateur retient ton dossier et tes choix (Jeu/Voix/Sorts/Réput)
+  et les pré-remplit au prochain lancement.
+- **Notification de version** : l'installateur vérifie GitHub et prévient si une nouvelle
+  version est disponible (bouton pour la télécharger).
+
 ## v2.1 — fix interfaces custom en jeu français
 - **Addon compagnon `EbonholdFRFix`** déployé automatiquement par l'installateur
   dans `Interface\AddOns\` (hors de `Data\` → **survit aux mises à jour** serveur).
