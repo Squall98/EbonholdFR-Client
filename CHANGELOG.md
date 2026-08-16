@@ -1,5 +1,13 @@
 # Changelog
 
+## v2.3 — compatibilité grosse MAJ serveur + 968 nouveaux sorts traduits
+- **968 nouveaux sorts/echoes/affixes** custom ajoutés par la grosse mise à jour du serveur,
+  **traduits** et intégrés (fichier central : 1760 descriptions au total).
+- Patch régénéré à partir des nouveaux `patch-5/6` → **compatible avec la nouvelle version**
+  du serveur (les descriptions FR disparues sont de retour).
+- Nouvel outil `tools/maj_fr.py` : régénère le patch et **traduit les nouveautés en local**
+  (Ollama / qwen3:14b), pour des mises à jour rapides après chaque patch serveur.
+
 ## v2.2 — réparation auto après mise à jour serveur + notif de version
 - **Réparation en 1 clic** : au lancement, si le patch FR a été **effacé par une mise à jour
   du serveur** (le launcher supprime `patch-Z.MPQ`), l'installateur le détecte et affiche

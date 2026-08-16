@@ -23,7 +23,7 @@ sys.path.insert(0, resource("tools"))
 import mpqwrite, dbc_localize  # noqa: E402
 import mpyq  # noqa: E402
 
-VERSION = "2.2"
+VERSION = "2.3"
 STORE_PATH = resource("data/custom_translations.json")
 PACK_URL = "https://drive.google.com/file/d/1j3OuTz1KMUsuUWXQiMJaE0yQXmAobRxu/view"
 REPO = "Squall98/EbonholdFR-Client"
