@@ -1,5 +1,15 @@
 # Changelog
 
+## v2.4 — echoes & skill tree en français + fix métiers
+- **Noms ET descriptions traduits** pour les echoes, l'arbre de compétences et les
+  affixes (fichier central : **1855 noms + 2422 descriptions**), y compris les
+  descriptions à token (`@flat40@`, `$s1`) et les nœuds « X (Rank N) ».
+- **Fenêtre Métiers en français** (Minage, Forge, Cuisine…) : l'installateur injecte
+  dans `patch-Z` une version FR de `SpellBookFrame.lua` (noms de métiers + garde
+  anti-taint) et de `TalentDatabase.lua` (descriptions génériques du skill tree).
+- Reste en anglais (limites connues) : le « chrome » de l'UI custom protégée
+  (onglets, « Rank », « Soul Ashes »…) et les descriptions envoyées par le serveur.
+
 ## v2.3 — compatibilité grosse MAJ serveur + 968 nouveaux sorts traduits
 - **968 nouveaux sorts/echoes/affixes** custom ajoutés par la grosse mise à jour du serveur,
   **traduits** et intégrés (fichier central : 1760 descriptions au total).
