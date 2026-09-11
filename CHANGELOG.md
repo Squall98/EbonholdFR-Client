@@ -1,5 +1,16 @@
 # Changelog
 
+## v2.5 — nouvelle MAJ serveur : +205 noms & +296 descriptions traduits
+- Nouvelle mise à jour du serveur → **205 nouveaux noms** et **296 nouvelles descriptions**
+  custom (echoes, arbre de compétences, affixes de gravure) **traduits** et intégrés
+  (fichier central : **2060 noms + 2718 descriptions** au total).
+- Patch régénéré à partir des nouveaux `patch-4/5/6` → **compatible avec la nouvelle version**
+  du serveur (descriptions FR de retour, nouveautés traduites).
+- Fenêtre Métiers (Minage, Forge, Cuisine…) et arbre de compétences toujours en français
+  (fixes `SpellBookFrame` + `TalentDatabase` réappliqués dans `patch-Z`).
+- Traductions faites en interne (sans IA locale ce coup-ci), tokens de sorts (`$s1`, `${...}`,
+  `$Lsecond:seconds;`…) tous préservés et validés automatiquement avant intégration.
+
 ## v2.4 — echoes & skill tree en français + fix métiers
 - **Noms ET descriptions traduits** pour les echoes, l'arbre de compétences et les
   affixes (fichier central : **1855 noms + 2422 descriptions**), y compris les
