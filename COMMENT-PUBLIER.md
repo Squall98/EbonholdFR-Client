@@ -26,7 +26,7 @@ Pas besoin de t'y connaître. Suis les étapes dans l'ordre. ⏱️ ~10 minutes.
 1. Menu **File → Add local repository**.
 2. Clique **Choose...** et sélectionne le dossier :
    ```
-   V:\Project\Ebonhold\github\EbonholdFR-Client
+   D:\Projets-WoW\Ebonhold\github\EbonholdFR-Client
    ```
 3. Clique **Add repository**.
 

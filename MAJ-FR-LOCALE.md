@@ -20,7 +20,7 @@ IA cloud. Il est écrit pour être lu aussi bien par Dylan que par une IA locale
 ## 2. Ce que fait la MAJ (en une commande)
 
 ```bash
-cd V:\Project\Ebonhold\github\EbonholdFR-Client\tools
+cd D:\Projets-WoW\Ebonhold\github\EbonholdFR-Client\tools
 python maj_fr.py                 # détecte, traduit en local, reconstruit, déploie
 python maj_fr.py --dry-run       # détecte + traduit + met à jour le fichier central, SANS déployer
 python maj_fr.py "D:\ebonhold\Ebonhold"   # forcer le dossier du jeu
