@@ -2,7 +2,7 @@
 
 Ce document contient **tout ce qu'il faut** pour mettre à jour le patch de traduction
 française d'Ebonhold après une mise à jour du serveur, **en local**, sans dépendre d'une
-IA cloud. Il est écrit pour être lu aussi bien par Dylan que par une IA locale
+IA cloud. Il est écrit pour être lu aussi bien par le mainteneur que par une IA locale
 (qwen3-coder) qui pilote le travail.
 
 ---
@@ -55,7 +55,7 @@ python maj_fr.py "D:\ebonhold\Ebonhold"   # forcer le dossier du jeu
    (le modèle traduit parfois un nom de sort ou une entrée interne — corriger à la main si besoin).
 3. **Publier pour les joueurs** (étape à faire avec Claude ou à la main, PAS automatique) :
    recompiler l'exe (`installer/build_exe.bat`) — il embarque le `custom_translations.json`
-   à jour — puis commit + nouvelle release GitHub. Règle de Dylan : **rien n'est publié
+   à jour — puis commit + nouvelle release GitHub. Règle du mainteneur : **rien n'est publié
    sans son GO explicite ET une validation en jeu.**
 
 ## 5. Pièges à connaître (essentiels)
