@@ -1,161 +1,477 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>EbonholdFR-Client</title><style>:root{--fond:#f5f6f8;--surface:#fff;--texte:#1f2328;--doux:#636c76;--bord:#e2e5e9;--accent:#3b6ea8;--t-att:#fbf3e6;--c-att:#9a5b13;--t-ok:#e6f4ea;--c-ok:#1f6b3a}
-@media (prefers-color-scheme:dark){:root{--fond:#16181c;--surface:#1d2025;--texte:#e3e6ea;--doux:#99a1aa;--bord:#2c3037;--accent:#86aee0;--t-att:#33291b;--c-att:#e3b06b;--t-ok:#1d3326;--c-ok:#9ed4ae}}
-*{box-sizing:border-box}body{margin:0;background:var(--fond);color:var(--texte);font:15px/1.6 "Segoe UI",system-ui,sans-serif}
-.page{max-width:1100px;margin:0 auto;padding:32px 24px 60px}h1{font-size:28px;font-weight:600;margin:0}.sous{color:var(--doux);font-size:17px;margin:6px 0 22px}
-nav{display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid var(--bord);margin-bottom:18px;position:sticky;top:0;background:var(--fond)}
-nav button{background:none;border:0;border-bottom:2px solid transparent;color:var(--doux);padding:10px 12px;font:inherit;cursor:pointer;margin-bottom:-1px}
-nav button.actif{color:var(--texte);border-bottom-color:var(--accent);font-weight:600}section{display:none}section.actif{display:block}
-.grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
-.carte{background:var(--surface);border:1px solid var(--bord);border-radius:10px;padding:16px 20px;margin-bottom:12px}
-.carte h3{margin:0 0 6px;font-size:16px}.ok{background:var(--t-ok)}.ok h3{color:var(--c-ok)}.att{background:var(--t-att)}.att h3{color:var(--c-att)}
-details{background:var(--surface);border:1px solid var(--bord);border-radius:8px;margin-bottom:8px}summary{cursor:pointer;padding:10px 14px;font-weight:600;font-family:Consolas,monospace;font-size:14px}
-details p{margin:0;padding:0 14px 12px;color:var(--doux)}input{width:100%;padding:9px 11px;border:1px solid var(--bord);border-radius:6px;background:var(--surface);color:var(--texte);font:inherit;margin-bottom:10px}
-ol li,ul li{margin:6px 0}code{font-family:Consolas,monospace;font-size:13px;background:var(--fond);padding:1px 5px;border-radius:4px}a{color:var(--accent)}
-.compte{color:var(--doux);font-size:13px;margin-bottom:8px}
-table{border-collapse:collapse;width:100%;margin:8px 0}td,th{border:1px solid var(--bord);padding:6px 9px;text-align:left;vertical-align:top}pre{background:var(--fond);border:1px solid var(--bord);border-radius:6px;padding:10px;overflow:auto}h2,h3,h4{margin:16px 0 6px}</style></head><body><div class="page"><h1>EbonholdFR-Client</h1><p class="sous">Met le client de Project Ebonhold (WoW 3.3.5a) en français, en un clic.</p>
-<nav><button class="actif" data-o="p">Présentation</button><button data-o="i">Installer</button><button data-o="l">Limites</button><button data-o="r">Le README complet</button></nav>
-<section id="p" class="actif"><div class="carte"><h3>Pour qui ?</h3>Les joueurs français de Project Ebonhold qui veulent les sorts, talents, echoes, quêtes et menus en français.</div><div class="grille"><div class='carte ok'><h3>✓</h3>Un installeur <code>.exe</code> : choisir le dossier du jeu, régler chaque catégorie en français ou en anglais, appliquer.</div><div class='carte ok'><h3>✓</h3>Méthode non destructive : un patch à part, qui survit aux mises à jour du serveur.</div><div class='carte ok'><h3>✓</h3>Réglages séparés : jeu, voix, sorts et talents, réputations et hauts faits.</div></div>
-<div class="carte"><h3>Comment ça marche</h3>Le français est injecté dans un patch séparé (patch-Z.MPQ) qui passe par-dessus les fichiers du serveur sans les modifier.</div></section>
-<section id="i"><div class="carte"><ol><li>Télécharger <code>EbonholdFR-Installer.exe</code> dans les Releases.</li><li>Fermer le jeu, lancer l'exe, choisir le dossier Ebonhold, régler, appliquer.</li><li>Pour les menus et quêtes en français : installer aussi le pack de langue frFR (lien dans le README).</li></ol></div></section>
-<section id="l"><div class="carte att"><h3>À savoir</h3><ul><li>Windows peut avertir pour un programme non signé.</li><li>Interface, menus et quêtes forment un seul réglage (limite du moteur de WoW).</li></ul></div></section>
-<section id="r"><div class="carte">
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EbonholdFR Client — Project Ebonhold en français</title>
+<meta name="description" content="Un installeur qui met le client du serveur WoW 3.3.5a Project Ebonhold en français, sans toucher aux fichiers du serveur.">
+<link rel="icon" href="logo.png">
+<style>
+:root{
+  --nuit:#040a14; --nuit2:#0a1628; --carte:rgba(14,30,52,.72); --bord:rgba(143,227,255,.18);
+  --texte:#e6f4ff; --doux:#9fb8cf; --glace:#8fe3ff; --givre:#d9f6ff; --bleu:#3a8dff; --or:#ffd100; --vert:#3fbf6a; --rouge:#ff6b6b;
+  --titre:"Palatino Linotype","Book Antiqua",Georgia,serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--nuit);color:var(--texte);font:16px/1.6 "Segoe UI",system-ui,-apple-system,sans-serif;overflow-x:hidden}
+canvas#neige{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.tout{position:relative;z-index:1}
+a{color:var(--glace)}
+code{font-family:Consolas,"Cascadia Mono",monospace;font-size:.9em;background:rgba(143,227,255,.1);border:1px solid rgba(143,227,255,.22);padding:1px 6px;border-radius:5px}
 
+/* Barre */
+header.barre{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:14px;padding:10px 26px;
+  background:rgba(4,10,20,.78);backdrop-filter:blur(10px);border-bottom:1px solid var(--bord)}
+header.barre img{width:34px;height:34px;border-radius:6px}
+header.barre b{font-family:var(--titre);font-size:18px;letter-spacing:.04em}
+header.barre nav{margin-left:auto;display:flex;flex-wrap:wrap;gap:4px}
+header.barre nav a{color:var(--doux);text-decoration:none;padding:6px 10px;border-radius:8px;font-size:14.5px}
+header.barre nav a:hover{color:var(--texte);background:rgba(143,227,255,.08)}
 
+/* Accueil */
+.hero{min-height:90vh;display:grid;place-items:center;text-align:center;padding:50px 20px 40px}
+.hero .cadre{position:relative;display:inline-block}
+.hero .cadre::before{content:"";position:absolute;inset:-30px;border-radius:50%;background:radial-gradient(circle,rgba(143,227,255,.35),transparent 65%);animation:pulse 4s ease-in-out infinite}
+.hero .logo{position:relative;width:200px;height:200px;border-radius:18px;box-shadow:0 0 0 1px rgba(217,246,255,.35),0 20px 60px rgba(0,0,0,.6)}
+@keyframes pulse{50%{opacity:.45;transform:scale(1.06)}}
+.hero h1{font-family:var(--titre);font-size:clamp(34px,6vw,64px);line-height:1.05;margin:26px 0 10px;font-weight:700;letter-spacing:.03em;
+  background:linear-gradient(90deg,#fff 0%,var(--glace) 35%,#5aa9ff 55%,var(--givre) 75%,#fff 100%);background-size:200% auto;
+  -webkit-background-clip:text;background-clip:text;color:transparent;animation:reflet 7s linear infinite;text-shadow:0 0 40px rgba(143,227,255,.15)}
+@keyframes reflet{to{background-position:200% center}}
+.hero p.accroche{font-size:clamp(17px,2.2vw,21px);color:var(--doux);max-width:740px;margin:0 auto 24px}
+.hero p.accroche b{color:var(--givre)}
+.badges{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:28px}
+.badge{font-size:13px;padding:4px 11px;border-radius:999px;border:1px solid var(--bord);background:rgba(143,227,255,.05);color:var(--doux)}
+.boutons{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:10px;font:inherit;font-weight:600;text-decoration:none;cursor:pointer;border:0}
+.btn.principal{background:linear-gradient(135deg,#bff0ff,var(--glace) 40%,var(--bleu));color:#04122a;box-shadow:0 8px 30px rgba(143,227,255,.3)}
+.btn.principal:hover{transform:translateY(-1px)}
+.btn.second{background:rgba(143,227,255,.06);color:var(--texte);border:1px solid var(--bord)}
+.defiler{margin-top:44px;color:var(--doux);font-size:14px;animation:clignote 2.4s ease-in-out infinite}
+@keyframes clignote{50%{opacity:.4}}
 
-<p>EbonholdFR — Client (traduction française)</p>
+/* Sections */
+section{max-width:1180px;margin:0 auto;padding:70px 22px}
+section h2{font-family:var(--titre);font-size:clamp(26px,3.5vw,38px);margin:0 0 8px;font-weight:700;letter-spacing:.02em}
+section h2::before{content:"❖ ";color:var(--glace);font-size:.7em;vertical-align:middle}
+section .intro{color:var(--doux);max-width:780px;margin:0 0 30px;font-size:17px}
+.grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.carte{background:var(--carte);border:1px solid var(--bord);border-radius:12px;padding:22px;backdrop-filter:blur(6px);position:relative;overflow:hidden}
+.carte::after{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--glace),transparent);opacity:.6}
+.carte .ico{font-size:30px;line-height:1;margin-bottom:12px}
+.carte h3{margin:0 0 6px;font-size:18px;font-family:var(--titre)}
+.carte p{margin:0;color:var(--doux)}
 
+/* Démo : fenêtre de l'installeur */
+.demo{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:22px;align-items:start}
+.fenetre{background:#f0f0f0;color:#111;border:1px solid #7a8a9a;border-radius:8px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.6);font:13px "Segoe UI",system-ui,sans-serif;position:relative}
+.fenetre .tb{display:flex;align-items:center;gap:8px;background:#fff;padding:7px 10px;border-bottom:1px solid #ddd;font-size:12.5px}
+.fenetre .tb img{width:16px;height:16px;border-radius:3px}
+.fenetre .tb .ctrl{margin-left:auto;display:flex;gap:16px;color:#555;font-size:13px}
+.fenetre .corps{padding:12px 16px 14px}
+.fenetre h4{margin:2px 0 0;text-align:center;font-size:19px;font-weight:700}
+.fenetre .sous{text-align:center;font-size:12px;margin-bottom:8px;color:#333}
+.bandeau{display:flex;align-items:center;gap:8px;padding:7px 8px;margin-bottom:6px;font-weight:700;font-size:12px}
+.bandeau button{margin-left:auto;white-space:nowrap}
+.ligne-dossier{display:flex;gap:6px}
+.ligne-dossier input{flex:1;min-width:0;font:inherit;padding:4px 6px;border:1px solid #9aa;background:#fff;color:#111}
+.fenetre button{font:inherit;background:#e1e1e1;border:1px solid #adadad;padding:3px 10px;cursor:pointer;color:#111}
+.fenetre button:hover{background:#e5f1fb;border-color:#0078d7}
+fieldset.reglages{border:1px solid #bcbcbc;margin:10px 0 6px;padding:4px 10px 8px}
+fieldset.reglages legend{font-weight:700;font-size:13.5px;padding:0 4px}
+.rg{display:grid;grid-template-columns:minmax(0,230px) auto 1fr;align-items:center;gap:8px;padding:4px 0}
+.rg select{font:inherit;padding:2px 4px;background:#e1e1e1;border:1px solid #adadad;color:#111}
+.rg small{color:#888;font-size:11px}
+.rg.inactif label{color:#999}
+.raccourcis{display:flex;justify-content:center;gap:8px;margin:4px 0}
+.appliquer{display:block;margin:8px auto;font-size:15px!important;font-weight:700;background:#2e7d32!important;color:#fff!important;border:0!important;padding:8px 26px!important}
+.appliquer:hover{background:#1b5e20!important}
+.appliquer:disabled{opacity:.6;cursor:wait}
+pre.journal{margin:0;background:#1e1e1e;color:#d4d4d4;font:12px/1.5 Consolas,monospace;height:170px;overflow:auto;padding:8px 10px;white-space:pre-wrap;border:1px solid #444}
+.boite{position:absolute;inset:0;background:rgba(0,0,0,.35);display:none;place-items:center;z-index:3}
+.boite.vu{display:grid}
+.boite .msg{background:#fff;border:1px solid #888;width:min(360px,90%);box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.boite .msg .t{padding:6px 10px;border-bottom:1px solid #ddd;font-size:12.5px}
+.boite .msg .c{padding:14px 14px 6px;display:flex;gap:10px;white-space:pre-line}
+.boite .msg .c span{font-size:26px;line-height:1}
+.boite .msg .b{display:flex;justify-content:flex-end;gap:6px;padding:8px 10px;background:#f0f0f0}
+.simu-ctrl{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;align-items:center}
+.simu-ctrl label{display:flex;align-items:center;gap:8px;color:var(--doux);cursor:pointer;font-size:14.5px}
+.simu-ctrl input{accent-color:var(--glace);width:17px;height:17px}
+.petit-btn{font:inherit;font-size:14px;background:rgba(143,227,255,.08);color:var(--texte);border:1px solid var(--bord);border-radius:8px;padding:7px 12px;cursor:pointer}
+.petit-btn:hover{background:rgba(143,227,255,.16)}
 
+/* Côté jeu : infobulle WoW */
+.jeu{background:radial-gradient(ellipse at 30% 0%,rgba(58,141,255,.18),transparent 60%),var(--carte);border:1px solid var(--bord);border-radius:12px;padding:20px}
+.jeu .etat{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.puce{font-size:12.5px;padding:3px 10px;border-radius:999px;border:1px solid var(--bord);color:var(--doux)}
+.puce.fr{color:#04122a;background:var(--glace);border-color:var(--glace);font-weight:600}
+.sorts{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.sorts button{font:inherit;font-size:13.5px;background:rgba(0,0,0,.25);color:var(--doux);border:1px solid var(--bord);border-radius:6px;padding:5px 10px;cursor:pointer}
+.sorts button.actif{color:var(--texte);border-color:var(--glace);background:rgba(143,227,255,.12)}
+.infobulle{background:rgba(9,9,26,.94);border:2px solid #8a8a9a;border-radius:6px;padding:10px 12px;max-width:420px;box-shadow:inset 0 0 0 1px #24243a,0 10px 30px rgba(0,0,0,.6);
+  font:14px/1.45 "Friz Quadrata TT","Palatino Linotype",Georgia,serif;transition:opacity .25s}
+.infobulle.change{opacity:.2}
+.infobulle .nom{color:#fff;font-size:16px;margin-bottom:4px}
+.infobulle .desc{color:var(--or);white-space:pre-line}
+.tok{font-family:Consolas,monospace;font-size:.86em;color:#bff0ff;background:rgba(143,227,255,.14);border:1px dashed rgba(143,227,255,.5);border-radius:4px;padding:0 3px;cursor:help}
+.legende{color:var(--doux);font-size:14px;margin-top:12px}
+.avap{display:inline-flex;border:1px solid var(--bord);border-radius:8px;overflow:hidden;margin-bottom:12px}
+.avap button{font:inherit;font-size:13.5px;background:transparent;color:var(--doux);border:0;padding:6px 12px;cursor:pointer}
+.avap button.actif{background:rgba(143,227,255,.15);color:var(--texte)}
 
+/* Comment ça marche */
+.marche{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:start}
+.pile{background:var(--carte);border:1px solid var(--bord);border-radius:12px;padding:20px;min-height:360px}
+.pile .titre-pile{color:var(--doux);font-size:13.5px;margin-bottom:10px}
+.couche{display:flex;align-items:center;gap:10px;border:1px solid var(--bord);border-radius:8px;padding:10px 12px;margin-bottom:8px;background:rgba(0,0,0,.25);
+  transition:all .5s cubic-bezier(.2,.8,.2,1)}
+.couche .n{font-family:Consolas,monospace;font-weight:700}
+.couche .r{margin-left:auto;font-size:12.5px;color:var(--doux)}
+.couche.z{border-color:var(--glace);background:linear-gradient(90deg,rgba(143,227,255,.18),rgba(58,141,255,.1));box-shadow:0 0 22px rgba(143,227,255,.2)}
+.couche.cache{opacity:0;transform:translateX(-30px) scale(.96);height:0;padding-top:0;padding-bottom:0;margin:0;border-width:0;overflow:hidden}
+.couche.neuf{animation:neuf 1s}
+@keyframes neuf{0%{box-shadow:0 0 0 0 rgba(255,209,0,.6)}100%{box-shadow:0 0 0 14px rgba(255,209,0,0)}}
+.ecran-jeu{margin-top:16px;border-top:1px dashed var(--bord);padding-top:14px}
+.ecran-jeu .lbl{color:var(--doux);font-size:13px;margin-bottom:6px}
+.recit{background:var(--carte);border:1px solid var(--bord);border-radius:12px;padding:22px}
+.recit .num{font-family:var(--titre);color:var(--glace);font-size:14px;letter-spacing:.08em;text-transform:uppercase}
+.recit h3{font-family:var(--titre);margin:4px 0 8px;font-size:21px}
+.recit p{color:var(--doux);margin:0 0 14px}
+.points{display:flex;gap:6px;margin-bottom:14px}
+.points i{width:28px;height:4px;border-radius:2px;background:rgba(143,227,255,.18)}
+.points i.on{background:var(--glace)}
+.nav-recit{display:flex;gap:8px;flex-wrap:wrap}
+.priorite{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:18px;font-size:14px}
+.priorite span{padding:5px 10px;border-radius:8px;border:1px solid var(--bord);background:rgba(0,0,0,.25)}
+.priorite span:first-child{border-color:var(--glace);color:var(--givre)}
+.priorite em{color:var(--doux);font-style:normal}
 
+/* Installer */
+.etapes{counter-reset:e;display:grid;gap:12px}
+.etape{display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start;background:var(--carte);border:1px solid var(--bord);border-radius:12px;padding:18px}
+.etape::before{counter-increment:e;content:counter(e);width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:20px;font-family:var(--titre);
+  background:radial-gradient(circle at 35% 30%,#fff,var(--glace) 40%,#2a6fd0);color:#04122a;box-shadow:0 0 16px rgba(143,227,255,.35)}
+.etape h3{margin:2px 0 6px;font-size:17px}
+.etape p{margin:0;color:var(--doux)}
+.liens{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.liens a{font-size:13.5px;text-decoration:none;padding:5px 11px;border-radius:999px;background:rgba(143,227,255,.1);border:1px solid rgba(143,227,255,.28)}
+.astuce{margin-top:14px;padding:14px 16px;border-left:3px solid var(--or);background:rgba(255,209,0,.06);border-radius:0 10px 10px 0;color:var(--doux)}
+.astuce b{color:var(--texte)}
 
+/* Limites */
+.limites{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.limite{background:var(--carte);border:1px solid var(--bord);border-radius:12px;padding:18px}
+.limite h3{margin:0 0 6px;font-size:16px}
+.limite p{margin:0;color:var(--doux);font-size:15px}
 
+footer{text-align:center;color:var(--doux);padding:50px 22px 70px;border-top:1px solid var(--bord)}
+footer img{border-radius:8px}
+footer a{margin:0 8px;display:inline-block}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(140px);background:#0d2140;border:1px solid var(--glace);color:#fff;
+  padding:12px 20px;border-radius:10px;box-shadow:0 10px 40px rgba(0,0,0,.5);transition:transform .35s;z-index:9;font-weight:600;max-width:92vw}
+.toast.vu{transform:translateX(-50%) translateY(0)}
 
-<p>Met le client <b>Project Ebonhold</b> (World of Warcraft 3.3.5a, rogue-lite) <b>en français</b> : sorts, talents, echoes, factions, compétences, hauts faits, titres… et le jeu de base (menus, quêtes, zones) avec le pack de langue.</p>
+@media (max-width:900px){.demo,.marche{grid-template-columns:1fr}header.barre nav{display:none}.rg{grid-template-columns:1fr auto}.rg small{grid-column:1/-1}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<canvas id="neige"></canvas>
+<div class="tout">
 
-<p>Méthode <b>non-destructive</b> : le français est injecté dans un patch <b>séparé</b> (<code>patch-Z.MPQ</code>) qui surcharge les fichiers du serveur <b>sans les modifier</b>. → compatible launcher, <b>survit aux mises à jour</b> du serveur, switch FR/EN instantané.</p>
+<header class="barre">
+  <img src="logo.png" alt=""><b>EbonholdFR · Client</b>
+  <nav><a href="#principe">Le principe</a><a href="#demo">Essaie-le</a><a href="#marche">Comment ça marche</a><a href="#installer">Installer</a><a href="#limites">À savoir</a></nav>
+</header>
 
+<div class="hero">
+  <div>
+    <div class="cadre"><img class="logo" src="logo.png" alt="Logo EbonholdFR"></div>
+    <h1>EbonholdFR — Client</h1>
+    <p class="accroche">Un installeur qui met <b>Project Ebonhold</b> (World of Warcraft 3.3.5a, version rogue-lite) <b>en français</b> : sorts, talents, echoes, réputations, hauts faits, titres… et tout le jeu de base avec le pack de langue. Sans abîmer un seul fichier du serveur.</p>
+    <div class="badges"><span class="badge">WoW 3.3.5a</span><span class="badge">Project Ebonhold</span><span class="badge">Windows</span><span class="badge">Version 2.5</span><span class="badge">Licence MIT</span></div>
+    <div class="boutons">
+      <a class="btn principal" href="https://github.com/Squall98/EbonholdFR-Client/releases/latest">⬇ Télécharger l'installeur</a>
+      <a class="btn second" href="#demo">❄ Essayer la démo</a>
+    </div>
+    <div class="defiler">▼ défile pour découvrir</div>
+  </div>
+</div>
 
+<section id="principe">
+  <h2>Le principe</h2>
+  <p class="intro">Le serveur Ebonhold ne remplit que la colonne anglaise de ses fichiers de données. L'installeur y ajoute le français dans un patch à part, <code>patch-Z.MPQ</code>, que le jeu lit en dernier. Plus de 2 000 noms et 2 700 descriptions propres au serveur sont déjà traduits.</p>
+  <div class="grille">
+    <div class="carte"><div class="ico">🇫🇷</div><h3>Ton jeu en français</h3><p>Les sorts, talents et echoes d'Ebonhold, les réputations, hauts faits et titres. Avec le pack frFR, aussi les menus, quêtes et zones.</p></div>
+    <div class="carte"><div class="ico">🛡️</div><h3>Rien n'est abîmé</h3><p>Le français vit dans un patch séparé. Les fichiers du serveur ne changent pas : le launcher ne voit aucune différence.</p></div>
+    <div class="carte"><div class="ico">🎚️</div><h3>À la carte</h3><p>Quatre réglages, chacun en français ou en anglais : Jeu, Voix, Sorts, Réputations. Un bouton « Tout en français » règle tout d'un coup.</p></div>
+    <div class="carte"><div class="ico">🔁</div><h3>Survit aux mises à jour</h3><p>Une mise à jour du serveur a effacé le français ? L'installeur s'en rend compte et propose « Réparer maintenant ». Tes réglages sont gardés.</p></div>
+  </div>
+</section>
 
-<h3>🟢 Installation (l&#x27;exe, sans Python)</h3>
+<section id="demo">
+  <h2>Essaie-le</h2>
+  <p class="intro">Voilà la fenêtre de l'installeur. <b>Règle les catégories</b> (ou clique « Tout en francais »), puis <b>Appliquer</b>. À droite, l'infobulle d'un sort change selon ce que tu as appliqué. Les traductions affichées sont les vraies, tirées du dépôt.</p>
+  <div class="demo">
+    <div>
+      <div class="fenetre" id="fenetre" aria-label="Fenêtre de l'installeur (simulation)">
+        <div class="tb"><img src="logo.png" alt=""><span>EbonholdFR - Langue (v2.5)</span><span class="ctrl"><span>—</span><span>☐</span><span>✕</span></span></div>
+        <div class="corps">
+          <h4>Ebonhold - Configurateur de langue</h4>
+          <div class="sous">Choisis ton dossier, regle chaque categorie, applique.</div>
+          <div id="bandeau"></div>
+          <div class="ligne-dossier"><input id="dossier" value="C:\Games\Ebonhold" aria-label="Dossier Ebonhold"><button id="parcourir">Parcourir...</button></div>
+          <fieldset class="reglages"><legend> Reglages </legend>
+            <div class="rg"><label for="r-base">Jeu (interface, menus, quetes) :</label><select id="r-base"><option>FR</option><option>EN</option></select><small>FR = pack frFR requis</small></div>
+            <div class="rg" id="ligne-voix"><label for="r-voix">Voix :</label><select id="r-voix"><option>FR</option><option>EN</option></select><small>(seulement si Jeu = FR)</small></div>
+            <div class="rg"><label for="r-sorts">Sorts, talents &amp; echoes :</label><select id="r-sorts"><option>FR</option><option>EN</option></select><small></small></div>
+            <div class="rg"><label for="r-autre">Reputations, hauts faits &amp; titres :</label><select id="r-autre"><option>FR</option><option>EN</option></select><small></small></div>
+          </fieldset>
+          <div class="raccourcis"><button id="tout-fr">Tout en francais</button><button id="tout-en">Tout en anglais</button></div>
+          <button class="appliquer" id="appliquer">&nbsp; Appliquer &nbsp;</button>
+          <pre class="journal" id="journal"></pre>
+        </div>
+        <div class="boite" id="boite"><div class="msg"><div class="t" id="boite-titre"></div><div class="c"><span id="boite-ico"></span><div id="boite-texte"></div></div><div class="b" id="boite-boutons"></div></div></div>
+      </div>
+      <div class="simu-ctrl">
+        <label><input type="checkbox" id="pack"> Le pack frFR est installé (simulation)</label>
+        <button class="petit-btn" id="maj">⚡ Simuler une mise à jour du serveur</button>
+        <button class="petit-btn" id="raz">↺ Recommencer</button>
+      </div>
+    </div>
 
-<p>&gt; 🔰 <b>Débutant ?</b> Suis le guide illustré pas-à-pas : <b>[GUIDE-INSTALLATION.md](GUIDE-INSTALLATION.md)</b>.</p>
+    <div class="jeu">
+      <div style="color:var(--doux);font-size:14px;margin-bottom:8px">Dans le jeu</div>
+      <div class="etat" id="etat"></div>
+      <div class="sorts" id="sorts"></div>
+      <div class="avap"><button id="vue-jeu" class="actif">Ce que tu vois en jeu</button><button id="vue-avant">Avant (anglais)</button><button id="vue-apres">Après (français)</button></div>
+      <div class="infobulle" id="infobulle"><div class="nom" id="ib-nom"></div><div class="desc" id="ib-desc"></div></div>
+      <div class="legende">Les codes en pointillé (<span class="tok">$s1</span>, <span class="tok">$d</span>…) sont remplacés par les vraies valeurs du sort quand le jeu affiche l'infobulle. La traduction les garde tels quels.</div>
+      <div class="legende" id="explication"></div>
+    </div>
+  </div>
+</section>
 
-<li>Télécharge <b><code>EbonholdFR-Installer.exe</code></b> (dans les *Releases*).</li>
-<li><b>Ferme le jeu</b>, puis double-clique sur l&#x27;exe.</li>
-<li>Choisis ton dossier Ebonhold (celui qui contient <code>Wow.exe</code>) — souvent détecté tout seul.</li>
-<li>Règle chaque <b>catégorie</b> en FR/EN (ou bouton <b>« Tout en français »</b>) et clique sur <b>Appliquer</b>.</li>
-<li>Lance le jeu.</li>
+<section id="marche">
+  <h2>Comment ça marche</h2>
+  <p class="intro">Le jeu lit ses archives de données (<code>.MPQ</code>) dans un ordre précis : la dernière chargée a le dernier mot. Suis l'histoire étape par étape.</p>
+  <div class="marche">
+    <div class="pile">
+      <div class="titre-pile">Dossier <code>Data</code> du jeu · lu de haut en bas</div>
+      <div class="couche" id="c5"><span>📦</span><span class="n">patch-5.MPQ</span><span class="r" id="c5r">serveur</span></div>
+      <div class="couche" id="c6"><span>📦</span><span class="n">patch-6.MPQ</span><span class="r" id="c6r">serveur</span></div>
+      <div class="couche z cache" id="cz"><span>❄</span><span class="n">patch-Z.MPQ</span><span class="r">le français, lu en dernier</span></div>
+      <div class="ecran-jeu">
+        <div class="lbl">À l'écran, pour le sort Peur :</div>
+        <div class="infobulle" id="mini"><div class="nom" id="mini-nom"></div><div class="desc" id="mini-desc"></div></div>
+      </div>
+    </div>
+    <div class="recit">
+      <div class="points" id="points"></div>
+      <div class="num" id="r-num"></div>
+      <h3 id="r-titre"></h3>
+      <p id="r-texte"></p>
+      <div class="nav-recit"><button class="petit-btn" id="r-retour">← Retour</button><button class="btn principal" id="r-suivant" style="padding:8px 16px">Suivant →</button><button class="petit-btn" id="r-debut">↺ Recommencer</button></div>
+      <div class="priorite"><em>Pour chaque texte, l'installeur prend :</em><span>nos traductions</span><em>sinon</em><span>le français de Blizzard (pack)</span><em>sinon</em><span>l'anglais</span></div>
+    </div>
+  </div>
+</section>
 
-<p>&gt; ⚠️ Windows peut afficher un avertissement bleu (« Windows a protégé votre ordinateur ») pour un programme non signé : clique sur <b>Informations complémentaires → Exécuter quand même</b>.</p>
+<section id="installer">
+  <h2>Installer</h2>
+  <p class="intro">Pas besoin de Python : l'installeur est un simple <code>.exe</code>. Deux façons de faire : <b>tout en français</b> (avec le pack de langue, environ 2,4 Go), ou <b>juste les sorts et echoes</b> en français, sans gros téléchargement.</p>
+  <div class="etapes">
+    <div class="etape"><div><h3>Pour tout le jeu en français : installe le pack frFR</h3><p>Télécharge le pack, décompresse-le (avec 7-Zip par exemple) et place le dossier <code>frFR</code> dans le dossier <code>Data</code> de ton jeu. Tu sautes cette étape si tu ne veux que les sorts en français.</p>
+      <div class="liens"><a href="https://drive.google.com/file/d/1j3OuTz1KMUsuUWXQiMJaE0yQXmAobRxu/view">Pack frFR (Google Drive)</a><a href="https://www.7-zip.org">7-Zip</a></div></div></div>
+    <div class="etape"><div><h3>Télécharge l'installeur</h3><p>Le fichier <code>EbonholdFR-Installer.exe</code>, dans la dernière version publiée.</p>
+      <div class="liens"><a href="https://github.com/Squall98/EbonholdFR-Client/releases/latest">⬇ EbonholdFR-Installer.exe</a></div></div></div>
+    <div class="etape"><div><h3>Ferme le jeu, lance l'installeur</h3><p>Le jeu doit être fermé pendant l'opération. Si Windows affiche « Windows a protégé votre ordinateur » (programme non signé), clique sur <b>Informations complémentaires</b>, puis <b>Exécuter quand même</b>.</p></div></div>
+    <div class="etape"><div><h3>Choisis ton dossier et tes réglages</h3><p>Le dossier Ebonhold (celui qui contient <code>Wow.exe</code>) est souvent trouvé tout seul, sinon clique sur <b>Parcourir</b>. Puis « Tout en français », ou règle chaque catégorie. Sans le pack : <b>Jeu = EN</b>, <b>Sorts = FR</b>.</p></div></div>
+    <div class="etape"><div><h3>Appliquer, puis joue</h3><p>Attends le message « C'est fait ! Lance le jeu. » et lance le jeu comme d'habitude.</p></div></div>
+  </div>
+  <div class="astuce"><b>Après une mise à jour du serveur :</b> lance d'abord le launcher officiel pour mettre le jeu à jour, puis relance l'installeur et clique sur Appliquer (ou « Réparer maintenant »). Il reconstruit le patch à partir des nouveaux fichiers. Pour revenir en anglais : « Tout en anglais », Appliquer. Tout est réversible.</div>
+</section>
 
-<h4>Les réglages (chacun Français / Anglais)</h4>
+<section id="limites">
+  <h2>À savoir</h2>
+  <p class="intro">Ce que l'installeur ne peut pas traduire, dit franchement.</p>
+  <div class="limites">
+    <div class="limite"><h3>📜 Textes envoyés par le serveur</h3><p>Les noms d'objets, de quêtes et de personnages propres à Ebonhold arrivent du serveur, pas des fichiers du jeu : ils restent en anglais.</p></div>
+    <div class="limite"><h3>🔨 Fenêtres spéciales du serveur</h3><p>La forge (extraction d'affixes) s'ouvre bien en français grâce au petit addon <code>EbonholdFRFix</code> installé avec le reste, mais le texte de ces fenêtres reste en anglais : il est écrit en dur dans l'addon du serveur.</p></div>
+    <div class="limite"><h3>🎛️ Jeu = un seul réglage</h3><p>Interface, menus et quêtes vont ensemble : c'est une limite du moteur de WoW. Seuls les voix et le contenu (sorts, réputations…) se règlent à part.</p></div>
+    <div class="limite"><h3>⚠️ Projet non officiel</h3><p>Fait par la communauté, sans lien avec Blizzard Entertainment ni Project Ebonhold. Aucun fichier du jeu n'est redistribué : tout est fabriqué sur ton PC, à partir de ton jeu.</p></div>
+  </div>
+</section>
 
-<table><tr><th>Réglage</th><th>Couvre</th><th>Pack frFR requis</th></tr><tr><td><b>Jeu</b></td><td>interface, menus, quêtes, zones</td><td>oui pour FR (~2,4 Go)</td></tr><tr><td><b>Voix</b></td><td>doublages (seulement si Jeu = FR)</td><td>—</td></tr><tr><td><b>Sorts, talents &amp; echoes</b></td><td>la base de données des sorts</td><td>non</td></tr><tr><td><b>Réputations, hauts faits &amp; titres</b></td><td>le reste du contenu</td><td>non</td></tr></table>
+<footer>
+  <img src="logo.png" alt="" width="48" height="48"><br>
+  EbonholdFR — Client · traduction française de Project Ebonhold · licence MIT<br>
+  <a href="https://github.com/Squall98/EbonholdFR-Client">Code source</a><a href="https://github.com/Squall98/EbonholdFR-Client/releases">Versions</a><a href="https://github.com/Squall98/EbonholdFR-Client/blob/main/CHANGELOG.md">Nouveautés</a><a href="https://github.com/Squall98/EbonholdFR-Client/blob/main/GUIDE-INSTALLATION.md">Guide d'installation</a>
+</footer>
+</div>
+<div class="toast" id="toast"></div>
 
-<p>Un bouton <b>« Tout en français »</b> règle tout d&#x27;un coup. Exemples : *Jeu FR + Voix EN* (texte français, voix anglaises), *Jeu EN + Sorts FR* (jeu anglais, sorts français)…</p>
+<script>
+// ---- Vraies traductions (data/custom_translations.json du dépôt) ----
+const SORTS = [
+  { en: "Fear", fr: "Peur",
+    den: "Strikes fear in an enemy, causing it to flee in terror for $d. Only 1 target can be feared at a time.",
+    dfr: "Effraie un ennemi, le faisant fuir de terreur pendant $d. Une seule cible peut être effrayée à la fois." },
+  { en: "Blast Wave", fr: "Vague de déflagration",
+    den: "A wave of flame radiates outward from the caster, damaging all enemies caught within the blast for $s1 Fire damage, knocking them back and dazing them for $d.",
+    dfr: "Une vague de flammes irradie depuis l'incantateur, infligeant $s1 points de dégâts de Feu à tous les ennemis pris dans l'explosion, les repoussant et les étourdissant pendant $d." },
+  { en: "Deferred Pain", fr: "Douleur différée",
+    den: "$s2% of the damage you take is delayed, dealing its damage over 5 seconds instead.",
+    dfr: "$s2% des dégâts que vous subissez sont reportés, infligeant leurs dégâts sur 5 secondes au lieu de tout de suite." },
+  { en: "Unstable Affliction", fr: "Affliction Instable",
+    den: "Shadow energy slowly destroys the target, causing $o1 damage over $d.  In addition, if the Unstable Affliction is dispelled it will cause $*9;s1 damage to the dispeller and silence them for $31117d. Only one Unstable Affliction per Warlock can be active on any one target.",
+    dfr: "Une énergie d'ombre détruit lentement la cible, infligeant $o1 dégâts sur $d. De plus, si Affliction instable est dissipée, elle inflige $*9;s1 dégâts au dissipateur et le réduit au silence pendant $31117d. Un seul Démoniste peut maintenir une Affliction instable active sur une même cible." },
+];
+const $ = s => document.querySelector(s);
+const echap = t => t.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+const jetons = t => echap(t).replace(/(\$\*?\d*;?[a-zA-Z]?\d*[a-zA-Z]\d*|\$\d+[a-z]\d*)/g, m => `<span class="tok" title="Valeur calculée par le jeu">${m}</span>`);
+const toast = m => { const t = $("#toast"); t.textContent = m; t.classList.add("vu"); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove("vu"), 2800); };
+const calme = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-<p>&gt; ⚠️ <b>interface / menus / quêtes</b> sont <b>un seul réglage</b> (« Jeu ») : c&#x27;est une limite du moteur de WoW (une seule langue pour tout ce bloc). Seuls les <b>voix</b> et le <b>contenu</b> (sorts, réputations…) sont séparables.</p>
+// ---- Neige et givre ----
+(() => {
+  const c = $("#neige"), x = c.getContext("2d"); let flocons = [];
+  const taille = () => { c.width = innerWidth * devicePixelRatio; c.height = innerHeight * devicePixelRatio;
+    flocons = Array.from({ length: Math.round(innerWidth * innerHeight / 7000) }, () => ({ x: Math.random() * c.width, y: Math.random() * c.height,
+      r: (Math.random() * 1.8 + .4) * devicePixelRatio, v: Math.random() * .5 + .2, o: Math.random() * 6.3, a: Math.random() * .6 + .25 })); };
+  taille(); addEventListener("resize", taille);
+  const dessin = t => {
+    x.clearRect(0, 0, c.width, c.height);
+    const g = x.createRadialGradient(c.width * .5, -c.height * .1, 0, c.width * .5, -c.height * .1, c.height * 1.1);
+    g.addColorStop(0, "rgba(90,170,255,.22)"); g.addColorStop(.5, "rgba(40,90,160,.08)"); g.addColorStop(1, "rgba(4,10,20,0)");
+    x.fillStyle = g; x.fillRect(0, 0, c.width, c.height);
+    for (const f of flocons) {
+      x.globalAlpha = f.a; x.fillStyle = "#e6f7ff"; x.beginPath(); x.arc(f.x, f.y, f.r, 0, 6.3); x.fill();
+      if (!calme) { f.y += f.v * devicePixelRatio; f.x += Math.sin(t / 1400 + f.o) * .35 * devicePixelRatio; if (f.y > c.height) { f.y = -5; f.x = Math.random() * c.width; } }
+    }
+    x.globalAlpha = 1; if (!calme) requestAnimationFrame(dessin);
+  };
+  requestAnimationFrame(dessin);
+})();
 
-<p>Mettre le <b>Jeu</b> en français nécessite le <b>pack de langue frFR</b> (les menus/quêtes vivent dedans). L&#x27;installeur te prévient s&#x27;il manque et ouvre la page de téléchargement.</p>
+// ---- Démo de l'installeur ----
+const R = { base: $("#r-base"), voix: $("#r-voix"), sorts: $("#r-sorts"), autre: $("#r-autre") };
+let applique = null;          // réglages réellement appliqués (null = jeu d'origine, en anglais)
+let sortChoisi = 0, vue = "jeu", patchPresent = false, efface = false;
+function journal(m) { const j = $("#journal"); j.textContent += m + "\n"; j.scrollTop = j.scrollHeight; }
+function boite(titre, ico, texte, boutons) {
+  $("#boite-titre").textContent = titre; $("#boite-ico").textContent = ico; $("#boite-texte").textContent = texte;
+  $("#boite-boutons").innerHTML = ""; boutons.forEach(([lib, f]) => { const b = document.createElement("button"); b.textContent = lib;
+    b.onclick = () => { $("#boite").classList.remove("vu"); f && f(); }; $("#boite-boutons").appendChild(b); });
+  $("#boite").classList.add("vu");
+}
+function majVoix() { $("#ligne-voix").classList.toggle("inactif", R.base.value !== "FR"); }
+function bandeau(html) { $("#bandeau").innerHTML = html; }
+function etat() {
+  const a = (applique && !efface) ? applique : { base: "EN", voix: "EN", sorts: "EN", autre: "EN" };
+  const voix = a.base === "FR" ? a.voix : "EN";
+  $("#etat").innerHTML = [["Interface et quêtes", a.base], ["Voix", voix], ["Sorts et echoes", a.sorts], ["Réputations, titres", a.autre]]
+    .map(([n, v]) => `<span class="puce ${v === "FR" ? "fr" : ""}">${n} : ${v}</span>`).join("");
+  const s = SORTS[sortChoisi];
+  const fr = vue === "apres" || (vue === "jeu" && a.sorts === "FR");
+  const ib = $("#infobulle"); ib.classList.add("change");
+  setTimeout(() => { $("#ib-nom").textContent = fr ? s.fr : s.en; $("#ib-desc").innerHTML = jetons(fr ? s.dfr : s.den); ib.classList.remove("change"); }, calme ? 0 : 150);
+  $("#explication").textContent = vue !== "jeu" ? "Comparaison directe, quel que soit le réglage appliqué."
+    : efface ? "La mise à jour du serveur a effacé patch-Z : retour à l'anglais. Clique « Reparer maintenant » dans l'installeur."
+    : !applique ? "Rien n'est encore appliqué : le jeu est tel que le serveur le livre, en anglais."
+    : a.sorts === "FR" ? "Sorts = FR : la description vient de patch-Z.MPQ, en français."
+    : "Sorts = EN : les sorts restent en anglais, même si le reste du jeu est en français.";
+}
+$("#sorts").innerHTML = SORTS.map((s, i) => `<button data-i="${i}" class="${i === 0 ? "actif" : ""}">${s.en}</button>`).join("");
+$("#sorts").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; sortChoisi = +b.dataset.i;
+  document.querySelectorAll("#sorts button").forEach(x => x.classList.toggle("actif", x === b)); etat(); });
+[["#vue-jeu", "jeu"], ["#vue-avant", "avant"], ["#vue-apres", "apres"]].forEach(([id, v]) => $(id).addEventListener("click", () => {
+  vue = v; document.querySelectorAll(".avap button").forEach(b => b.classList.toggle("actif", b.id === id.slice(1))); etat(); }));
 
-<p>📥 <b>Pack frFR</b> : <a href="https://drive.google.com/file/d/1j3OuTz1KMUsuUWXQiMJaE0yQXmAobRxu/view">Télécharger (Google Drive)</a> — décompresse l&#x27;archive et place le dossier <b><code>frFR</code></b> dans le <b><code>Data</code></b> de ton client, puis relance l&#x27;installeur.</p>
+const toutA = v => Object.values(R).forEach(s => s.value = v);
+$("#tout-fr").onclick = () => { toutA("FR"); majVoix(); };
+$("#tout-en").onclick = () => { toutA("EN"); majVoix(); };
+R.base.onchange = majVoix;
+$("#parcourir").onclick = () => { $("#dossier").value = "C:\\Games\\Ebonhold"; toast("Dossier choisi : celui qui contient Wow.exe et Data"); };
 
+function appliquer() {
+  const dossier = $("#dossier").value.trim();
+  if (!/ebonhold/i.test(dossier)) {
+    boite("Dossier invalide", "⛔", "Choisis le dossier Ebonhold (celui avec Wow.exe et le dossier Data).", [["OK"]]); return;
+  }
+  const r = { base: R.base.value, voix: R.voix.value, sorts: R.sorts.value, autre: R.autre.value };
+  if (r.base === "FR" && !$("#pack").checked) {
+    boite("Pack frFR manquant", "❓", "Mettre le jeu (interface/menus/quetes) en francais necessite le pack frFR (~2,4 Go).\n\nOuvrir la page de telechargement ?\n(Decompresse, place le dossier 'frFR' dans Data, puis relance.)",
+      [["Oui", () => toast("Ici, coche « Le pack frFR est installé » sous la fenêtre")], ["Non"]]); return;
+  }
+  const btn = $("#appliquer"); btn.disabled = true;
+  const lignes = [];
+  if (r.base === "FR") {
+    if (r.voix === "EN") ["speech-frFR.MPQ", "lichking-speech-frFR.MPQ", "expansion-speech-frFR.MPQ"].forEach(f => lignes.push(`Copie voix anglaises -> ${f} (peut prendre 1 min)...`));
+    else if (applique && applique.base === "FR" && applique.voix === "EN") ["speech-frFR.MPQ", "lichking-speech-frFR.MPQ", "expansion-speech-frFR.MPQ"].forEach(f => lignes.push(`Voix FR restaurees : ${f}`));
+    lignes.push("Fix metiers (SpellBookFrame) ajoute a patch-Z.", "Fix skill tree (TalentDatabase) ajoute a patch-Z.");
+  }
+  const rien = r.base === "EN" && r.sorts === "EN" && r.autre === "EN";
+  lignes.push(rien ? "patch-Z retire (rien a traduire)." : "patch-Z.MPQ ecrit.");
+  lignes.push("Addon EbonholdFRFix installe (forge custom OK en francais).");
+  lignes.push(`Jeu=${r.base}  Voix=${r.voix}  Sorts=${r.sorts}  Reput=${r.autre}.`);
+  lignes.push("", "TERMINE ! Lance Wow.exe depuis ce dossier.");
+  journal("");
+  lignes.forEach((l, i) => setTimeout(() => {
+    journal(l);
+    if (i === lignes.length - 1) {
+      applique = r; efface = false; patchPresent = !rien; bandeau(""); btn.disabled = false; etat();
+      boite("Termine", "ℹ️", "C'est fait ! Lance le jeu.", [["OK"]]);
+    }
+  }, calme ? 0 : 260 * (i + 1)));
+}
+$("#appliquer").onclick = appliquer;
 
+$("#maj").onclick = () => {
+  if (!applique || !patchPresent) { toast("Applique d'abord du français pour voir la réparation"); return; }
+  // Le launcher a effacé patch-Z : le jeu repasse en anglais tant qu'on n'a pas réparé.
+  efface = true; patchPresent = false;
+  ["base", "voix", "sorts", "autre"].forEach(k => R[k].value = applique[k]); majVoix();
+  journal(""); journal("[Installeur relance apres la mise a jour du serveur]");
+  bandeau(`<div class="bandeau" style="background:#4a2b00;color:#ffcc66">Ton patch FR a ete efface par une mise a jour du serveur. Clique pour le remettre (tes reglages sont deja pre-remplis).<button id="reparer" style="background:#2e7d32;color:#fff;border-color:#1b5e20"> Reparer maintenant </button></div>`);
+  $("#reparer").onclick = appliquer;
+  etat();
+  toast("Mise à jour du serveur : le launcher a effacé patch-Z.MPQ");
+};
+$("#raz").onclick = () => {
+  applique = null; efface = false; patchPresent = false; toutA("FR"); majVoix(); bandeau(""); $("#pack").checked = false;
+  $("#dossier").value = "C:\\Games\\Ebonhold"; $("#journal").textContent = ""; journal("Pret. Le jeu doit etre FERME pendant l'operation."); etat();
+};
+$("#raz").onclick();
 
-<h3>Pourquoi ça marche (et pourquoi c&#x27;est solide)</h3>
-
-<p>Ebonhold remplit seulement la colonne <b>anglaise</b> de ses fichiers de données (<code>.dbc</code>). On y injecte le français par-dessus, mais <b>dans un patch séparé</b> :</p>
-
-<li><code>patch-Z.MPQ</code> est chargé par le client <b>après</b> <code>patch-5/6</code> et les <b>surcharge</b> — sans toucher aux originaux.</li>
-<li>Donc le launcher ne voit <b>aucun fichier modifié</b> → pas d&#x27;erreur « not up to date », et le français <b>survit aux mises à jour</b> du serveur.</li>
-<li>Le <b>switch FR/EN</b> revient juste à ajouter/retirer <code>patch-Z</code> + changer la langue.</li>
-
-<p>Priorité des textes : <b>nos traductions</b> (custom) &gt; <b>français de base Blizzard</b> (pack) &gt; anglais.</p>
-
-
-
-<h3>Mettre à jour après un patch du serveur</h3>
-
-<li>Lance le <b>launcher officiel</b> d&#x27;Ebonhold pour mettre à jour le jeu.</li>
-<li><b>Relance l&#x27;installeur</b> et clique sur <b>Appliquer</b> (il reconstruit <code>patch-Z</code> à partir des nouveaux fichiers).</li>
-
-
-
-<h3>Pour les développeurs (méthode manuelle)</h3>
-
-<p>Prérequis : <b>Python 3</b> + <b>mpyq</b> (<code>pip install mpyq</code>).</p>
-
-<pre>
-cp config.example.py config.py     # renseigne SRC_DATA / DST_DATA (= le Data de ton client)
-cd tools
-python extract_base_dbc.py         # extrait les Spell.dbc de référence
-python build_patchz.py             # construit patch-Z.MPQ (FR), sans toucher patch-5/6
-</pre>
-
-<p><code>build_patchz.py</code> accepte la colonne cible : <code>frFR</code> (jeu en français, avec pack) ou <code>enUS</code> (jeu anglais + contenu FR, sans pack).</p>
-
-<h4>Ajouter / corriger une traduction</h4>
-
-<p>Tout vit dans <b><code>data/custom_translations.json</code></b> (clé = texte anglais <b>exact</b>, valeur = français ; préserve les codes <code>$s1</code>, <code>$d</code>, <code>${...}</code>). Puis relance <code>build_patchz.py</code>.</p>
-
-
-
-<h3>Structure</h3>
-
-<pre>
-EbonholdFR-Client/
-├── installer/
-│   ├── ebonhold_fr_installer.py   # configurateur (interface + profils)
-│   └── build_exe.bat              # compile l&#x27;exe autonome
-├── data/custom_translations.json  # LES traductions (EN → FR)
-├── tools/
-│   ├── dbc_localize.py            # moteur de fusion .dbc (colonne enUS ou frFR)
-│   ├── mpqwrite.py                # créateur d&#x27;archive MPQ en Python pur
-│   ├── build_patchz.py            # construit patch-Z.MPQ
-│   ├── extract_base_dbc.py        # extrait les DBC de référence
-│   ├── extract_custom_spells.py   # liste ce qui reste à traduire
-│   └── auto_translate.py          # traductions par motifs (montures, tomes…)
-├── COMMENT-PUBLIER.md             # guide GitHub pas-à-pas
-├── LICENSE  ·  CHANGELOG.md
-</pre>
-
-
-
-<h3>Détails techniques</h3>
-
-<li><b><code>.dbc</code></b> WotLK 3.3.5a (WDBC). Colonnes localisées détectées automatiquement ; français écrit dans le slot <b>frFR</b> (<code>+2</code>) ou <b>enUS</b> (<code>+0</code>) selon le profil.</li>
-<li><b>Encodage UTF-8</b> (le client Ebonhold — y compris en anglais — affiche bien les accents UTF-8).</li>
-<li><b>MPQ</b> : <code>mpqwrite.py</code> crée des archives MPQ v1 (secteurs zlib) lisibles par le client 3.3.5a, sans dépendance externe.</li>
-<li><b><code>patch-Z.MPQ</code></b> : patch racine chargé après <code>patch-5/6</code>, qu&#x27;il surcharge sans les modifier.</li>
-
-
-
-<h3>Interfaces custom en jeu français</h3>
-
-<p>Certaines interfaces custom d&#x27;Ebonhold (la <b>forge</b> / extraction d&#x27;affixes…) ne s&#x27;ouvraient pas</p>
-<p>quand le jeu était en français : l&#x27;addon du serveur ne reconnaît que le <b>nom anglais</b> du PNJ.</p>
-<p>L&#x27;installateur déploie donc un petit addon compagnon <b><code>EbonholdFRFix</code></b> dans <code>Interface\AddOns\</code></p>
-<p>(hors de <code>Data\</code>, donc <b>à l&#x27;épreuve des mises à jour</b>) qui ré-ouvre la bonne fenêtre quand il</p>
-<p>voit le nom <b>français</b>. Purement additif, sans effet sur un client anglais.</p>
-<p>Le <b>texte interne</b> de ces fenêtres reste en anglais (codé en dur dans l&#x27;addon d&#x27;Ebonhold).</p>
-
-
-
-<h3>Limites</h3>
-
-<li><b>Noms d&#x27;objets / quêtes / PNJ custom</b> : envoyés par le serveur, pas dans un <code>.dbc</code> → restent en anglais.</li>
-<li><b>Noms</b> des sorts/echoes custom : laissés en anglais (cohérence avec les guides) ; seules les <b>descriptions</b> sont traduites.</li>
-<li><b>Texte interne</b> des interfaces custom (forge…) : codé en dur en anglais côté Ebonhold → non traduit (l&#x27;interface s&#x27;ouvre et fonctionne, cf. ci-dessus).</li>
-
-
-
-<h3>Crédits &amp; avertissement</h3>
-
-<p>Réalisé par <b>Squall98</b>. Projet communautaire <b>non officiel</b>, sans affiliation avec Blizzard Entertainment ni Project Ebonhold. Aucun fichier de jeu n&#x27;est redistribué. Sous licence MIT.</p>
-
-<p>&gt; 📖 Pour publier/mettre à jour ce dépôt sur GitHub : <b>[COMMENT-PUBLIER.md](COMMENT-PUBLIER.md)</b>.</p>
-</div></section>
-<script>document.querySelector("nav").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
-document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("actif",x===b));
-document.querySelectorAll("section").forEach(s=>s.classList.toggle("actif",s.id===b.dataset.o));window.scrollTo(0,0);});</script></div></body></html>
+// ---- Comment ça marche : récit pas à pas ----
+const PEUR = SORTS[0];
+const ETAPES = [
+  { t: "Le jeu tel que le serveur le livre", x: "Le serveur fournit patch-5.MPQ et patch-6.MPQ. Leurs fichiers de données (.dbc) n'ont que la colonne anglaise remplie : tout s'affiche en anglais.", z: false, fr: false },
+  { t: "L'installeur fabrique patch-Z.MPQ", x: "Il lit les fichiers du serveur, y ajoute le français et range le résultat dans une archive à part, patch-Z.MPQ. patch-5 et patch-6 ne sont pas modifiés.", z: true, fr: false, neuf: true },
+  { t: "Le jeu lit patch-Z en dernier", x: "Les archives sont lues dans l'ordre : patch-Z passe après patch-5 et patch-6, donc ses textes passent par-dessus. Le sort s'affiche en français.", z: true, fr: true },
+  { t: "Le launcher ne voit rien de changé", x: "Le launcher officiel vérifie les fichiers du serveur : ils sont intacts. Pas d'erreur « not up to date », et revenir en anglais revient juste à retirer patch-Z.", z: true, fr: true, ok: true },
+  { t: "Une mise à jour du serveur arrive", x: "Le launcher installe de nouveaux patch-5/6… et efface patch-Z.MPQ au passage. Le jeu repasse en anglais.", z: false, fr: false, maj: true },
+  { t: "« Réparer maintenant »", x: "Au lancement, l'installeur voit que le patch a disparu et propose de le remettre, avec tes réglages déjà remplis. Un clic : patch-Z est reconstruit à partir des nouveaux fichiers.", z: true, fr: true, neuf: true },
+];
+let pas = 0;
+$("#points").innerHTML = ETAPES.map(() => "<i></i>").join("");
+function recit() {
+  const e = ETAPES[pas];
+  $("#r-num").textContent = `Étape ${pas + 1} sur ${ETAPES.length}`; $("#r-titre").textContent = e.t; $("#r-texte").textContent = e.x;
+  document.querySelectorAll("#points i").forEach((p, i) => p.classList.toggle("on", i <= pas));
+  const cz = $("#cz"); cz.classList.toggle("cache", !e.z); cz.classList.remove("neuf"); if (e.neuf) { void cz.offsetWidth; cz.classList.add("neuf"); }
+  $("#c5r").textContent = e.ok ? "✔ intact" : e.maj ? "⟳ mis à jour" : "serveur";
+  $("#c6r").textContent = e.ok ? "✔ intact" : e.maj ? "⟳ mis à jour" : "serveur";
+  $("#mini-nom").textContent = e.fr ? PEUR.fr : PEUR.en; $("#mini-desc").innerHTML = jetons(e.fr ? PEUR.dfr : PEUR.den);
+  $("#r-retour").disabled = pas === 0; $("#r-suivant").textContent = pas === ETAPES.length - 1 ? "Terminé ✔" : "Suivant →";
+}
+$("#r-suivant").onclick = () => { if (pas < ETAPES.length - 1) { pas++; recit(); } else toast("C'est tout le secret : un patch à part, lu en dernier."); };
+$("#r-retour").onclick = () => { if (pas > 0) { pas--; recit(); } };
+$("#r-debut").onclick = () => { pas = 0; recit(); };
+recit();
+</script>
+</body>
+</html>
