@@ -4,6 +4,8 @@
 
 <h1 align="center">EbonholdFR — Client (traduction française)</h1>
 
+📖 **Présentation illustrée** : https://squall98.github.io/EbonholdFR-Client/ (aussi dans `docs/index.html`)
+
 <p align="center">
   <a href="https://github.com/Squall98/EbonholdFR-Client/releases/latest"><img src="https://img.shields.io/github/v/release/Squall98/EbonholdFR-Client?label=t%C3%A9l%C3%A9charger&color=2e7d32" alt="Release"></a>
   <img src="https://img.shields.io/badge/WoW-3.3.5a-blue" alt="WoW 3.3.5a">

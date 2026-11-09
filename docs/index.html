@@ -1,0 +1,161 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EbonholdFR-Client</title><style>:root{--fond:#f5f6f8;--surface:#fff;--texte:#1f2328;--doux:#636c76;--bord:#e2e5e9;--accent:#3b6ea8;--t-att:#fbf3e6;--c-att:#9a5b13;--t-ok:#e6f4ea;--c-ok:#1f6b3a}
+@media (prefers-color-scheme:dark){:root{--fond:#16181c;--surface:#1d2025;--texte:#e3e6ea;--doux:#99a1aa;--bord:#2c3037;--accent:#86aee0;--t-att:#33291b;--c-att:#e3b06b;--t-ok:#1d3326;--c-ok:#9ed4ae}}
+*{box-sizing:border-box}body{margin:0;background:var(--fond);color:var(--texte);font:15px/1.6 "Segoe UI",system-ui,sans-serif}
+.page{max-width:1100px;margin:0 auto;padding:32px 24px 60px}h1{font-size:28px;font-weight:600;margin:0}.sous{color:var(--doux);font-size:17px;margin:6px 0 22px}
+nav{display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid var(--bord);margin-bottom:18px;position:sticky;top:0;background:var(--fond)}
+nav button{background:none;border:0;border-bottom:2px solid transparent;color:var(--doux);padding:10px 12px;font:inherit;cursor:pointer;margin-bottom:-1px}
+nav button.actif{color:var(--texte);border-bottom-color:var(--accent);font-weight:600}section{display:none}section.actif{display:block}
+.grille{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.carte{background:var(--surface);border:1px solid var(--bord);border-radius:10px;padding:16px 20px;margin-bottom:12px}
+.carte h3{margin:0 0 6px;font-size:16px}.ok{background:var(--t-ok)}.ok h3{color:var(--c-ok)}.att{background:var(--t-att)}.att h3{color:var(--c-att)}
+details{background:var(--surface);border:1px solid var(--bord);border-radius:8px;margin-bottom:8px}summary{cursor:pointer;padding:10px 14px;font-weight:600;font-family:Consolas,monospace;font-size:14px}
+details p{margin:0;padding:0 14px 12px;color:var(--doux)}input{width:100%;padding:9px 11px;border:1px solid var(--bord);border-radius:6px;background:var(--surface);color:var(--texte);font:inherit;margin-bottom:10px}
+ol li,ul li{margin:6px 0}code{font-family:Consolas,monospace;font-size:13px;background:var(--fond);padding:1px 5px;border-radius:4px}a{color:var(--accent)}
+.compte{color:var(--doux);font-size:13px;margin-bottom:8px}
+table{border-collapse:collapse;width:100%;margin:8px 0}td,th{border:1px solid var(--bord);padding:6px 9px;text-align:left;vertical-align:top}pre{background:var(--fond);border:1px solid var(--bord);border-radius:6px;padding:10px;overflow:auto}h2,h3,h4{margin:16px 0 6px}</style></head><body><div class="page"><h1>EbonholdFR-Client</h1><p class="sous">Met le client de Project Ebonhold (WoW 3.3.5a) en français, en un clic.</p>
+<nav><button class="actif" data-o="p">Présentation</button><button data-o="i">Installer</button><button data-o="l">Limites</button><button data-o="r">Le README complet</button></nav>
+<section id="p" class="actif"><div class="carte"><h3>Pour qui ?</h3>Les joueurs français de Project Ebonhold qui veulent les sorts, talents, echoes, quêtes et menus en français.</div><div class="grille"><div class='carte ok'><h3>✓</h3>Un installeur <code>.exe</code> : choisir le dossier du jeu, régler chaque catégorie en français ou en anglais, appliquer.</div><div class='carte ok'><h3>✓</h3>Méthode non destructive : un patch à part, qui survit aux mises à jour du serveur.</div><div class='carte ok'><h3>✓</h3>Réglages séparés : jeu, voix, sorts et talents, réputations et hauts faits.</div></div>
+<div class="carte"><h3>Comment ça marche</h3>Le français est injecté dans un patch séparé (patch-Z.MPQ) qui passe par-dessus les fichiers du serveur sans les modifier.</div></section>
+<section id="i"><div class="carte"><ol><li>Télécharger <code>EbonholdFR-Installer.exe</code> dans les Releases.</li><li>Fermer le jeu, lancer l'exe, choisir le dossier Ebonhold, régler, appliquer.</li><li>Pour les menus et quêtes en français : installer aussi le pack de langue frFR (lien dans le README).</li></ol></div></section>
+<section id="l"><div class="carte att"><h3>À savoir</h3><ul><li>Windows peut avertir pour un programme non signé.</li><li>Interface, menus et quêtes forment un seul réglage (limite du moteur de WoW).</li></ul></div></section>
+<section id="r"><div class="carte">
+
+
+
+<p>EbonholdFR — Client (traduction française)</p>
+
+
+
+
+
+
+
+<p>Met le client <b>Project Ebonhold</b> (World of Warcraft 3.3.5a, rogue-lite) <b>en français</b> : sorts, talents, echoes, factions, compétences, hauts faits, titres… et le jeu de base (menus, quêtes, zones) avec le pack de langue.</p>
+
+<p>Méthode <b>non-destructive</b> : le français est injecté dans un patch <b>séparé</b> (<code>patch-Z.MPQ</code>) qui surcharge les fichiers du serveur <b>sans les modifier</b>. → compatible launcher, <b>survit aux mises à jour</b> du serveur, switch FR/EN instantané.</p>
+
+
+
+<h3>🟢 Installation (l&#x27;exe, sans Python)</h3>
+
+<p>&gt; 🔰 <b>Débutant ?</b> Suis le guide illustré pas-à-pas : <b>[GUIDE-INSTALLATION.md](GUIDE-INSTALLATION.md)</b>.</p>
+
+<li>Télécharge <b><code>EbonholdFR-Installer.exe</code></b> (dans les *Releases*).</li>
+<li><b>Ferme le jeu</b>, puis double-clique sur l&#x27;exe.</li>
+<li>Choisis ton dossier Ebonhold (celui qui contient <code>Wow.exe</code>) — souvent détecté tout seul.</li>
+<li>Règle chaque <b>catégorie</b> en FR/EN (ou bouton <b>« Tout en français »</b>) et clique sur <b>Appliquer</b>.</li>
+<li>Lance le jeu.</li>
+
+<p>&gt; ⚠️ Windows peut afficher un avertissement bleu (« Windows a protégé votre ordinateur ») pour un programme non signé : clique sur <b>Informations complémentaires → Exécuter quand même</b>.</p>
+
+<h4>Les réglages (chacun Français / Anglais)</h4>
+
+<table><tr><th>Réglage</th><th>Couvre</th><th>Pack frFR requis</th></tr><tr><td><b>Jeu</b></td><td>interface, menus, quêtes, zones</td><td>oui pour FR (~2,4 Go)</td></tr><tr><td><b>Voix</b></td><td>doublages (seulement si Jeu = FR)</td><td>—</td></tr><tr><td><b>Sorts, talents &amp; echoes</b></td><td>la base de données des sorts</td><td>non</td></tr><tr><td><b>Réputations, hauts faits &amp; titres</b></td><td>le reste du contenu</td><td>non</td></tr></table>
+
+<p>Un bouton <b>« Tout en français »</b> règle tout d&#x27;un coup. Exemples : *Jeu FR + Voix EN* (texte français, voix anglaises), *Jeu EN + Sorts FR* (jeu anglais, sorts français)…</p>
+
+<p>&gt; ⚠️ <b>interface / menus / quêtes</b> sont <b>un seul réglage</b> (« Jeu ») : c&#x27;est une limite du moteur de WoW (une seule langue pour tout ce bloc). Seuls les <b>voix</b> et le <b>contenu</b> (sorts, réputations…) sont séparables.</p>
+
+<p>Mettre le <b>Jeu</b> en français nécessite le <b>pack de langue frFR</b> (les menus/quêtes vivent dedans). L&#x27;installeur te prévient s&#x27;il manque et ouvre la page de téléchargement.</p>
+
+<p>📥 <b>Pack frFR</b> : <a href="https://drive.google.com/file/d/1j3OuTz1KMUsuUWXQiMJaE0yQXmAobRxu/view">Télécharger (Google Drive)</a> — décompresse l&#x27;archive et place le dossier <b><code>frFR</code></b> dans le <b><code>Data</code></b> de ton client, puis relance l&#x27;installeur.</p>
+
+
+
+<h3>Pourquoi ça marche (et pourquoi c&#x27;est solide)</h3>
+
+<p>Ebonhold remplit seulement la colonne <b>anglaise</b> de ses fichiers de données (<code>.dbc</code>). On y injecte le français par-dessus, mais <b>dans un patch séparé</b> :</p>
+
+<li><code>patch-Z.MPQ</code> est chargé par le client <b>après</b> <code>patch-5/6</code> et les <b>surcharge</b> — sans toucher aux originaux.</li>
+<li>Donc le launcher ne voit <b>aucun fichier modifié</b> → pas d&#x27;erreur « not up to date », et le français <b>survit aux mises à jour</b> du serveur.</li>
+<li>Le <b>switch FR/EN</b> revient juste à ajouter/retirer <code>patch-Z</code> + changer la langue.</li>
+
+<p>Priorité des textes : <b>nos traductions</b> (custom) &gt; <b>français de base Blizzard</b> (pack) &gt; anglais.</p>
+
+
+
+<h3>Mettre à jour après un patch du serveur</h3>
+
+<li>Lance le <b>launcher officiel</b> d&#x27;Ebonhold pour mettre à jour le jeu.</li>
+<li><b>Relance l&#x27;installeur</b> et clique sur <b>Appliquer</b> (il reconstruit <code>patch-Z</code> à partir des nouveaux fichiers).</li>
+
+
+
+<h3>Pour les développeurs (méthode manuelle)</h3>
+
+<p>Prérequis : <b>Python 3</b> + <b>mpyq</b> (<code>pip install mpyq</code>).</p>
+
+<pre>
+cp config.example.py config.py     # renseigne SRC_DATA / DST_DATA (= le Data de ton client)
+cd tools
+python extract_base_dbc.py         # extrait les Spell.dbc de référence
+python build_patchz.py             # construit patch-Z.MPQ (FR), sans toucher patch-5/6
+</pre>
+
+<p><code>build_patchz.py</code> accepte la colonne cible : <code>frFR</code> (jeu en français, avec pack) ou <code>enUS</code> (jeu anglais + contenu FR, sans pack).</p>
+
+<h4>Ajouter / corriger une traduction</h4>
+
+<p>Tout vit dans <b><code>data/custom_translations.json</code></b> (clé = texte anglais <b>exact</b>, valeur = français ; préserve les codes <code>$s1</code>, <code>$d</code>, <code>${...}</code>). Puis relance <code>build_patchz.py</code>.</p>
+
+
+
+<h3>Structure</h3>
+
+<pre>
+EbonholdFR-Client/
+├── installer/
+│   ├── ebonhold_fr_installer.py   # configurateur (interface + profils)
+│   └── build_exe.bat              # compile l&#x27;exe autonome
+├── data/custom_translations.json  # LES traductions (EN → FR)
+├── tools/
+│   ├── dbc_localize.py            # moteur de fusion .dbc (colonne enUS ou frFR)
+│   ├── mpqwrite.py                # créateur d&#x27;archive MPQ en Python pur
+│   ├── build_patchz.py            # construit patch-Z.MPQ
+│   ├── extract_base_dbc.py        # extrait les DBC de référence
+│   ├── extract_custom_spells.py   # liste ce qui reste à traduire
+│   └── auto_translate.py          # traductions par motifs (montures, tomes…)
+├── COMMENT-PUBLIER.md             # guide GitHub pas-à-pas
+├── LICENSE  ·  CHANGELOG.md
+</pre>
+
+
+
+<h3>Détails techniques</h3>
+
+<li><b><code>.dbc</code></b> WotLK 3.3.5a (WDBC). Colonnes localisées détectées automatiquement ; français écrit dans le slot <b>frFR</b> (<code>+2</code>) ou <b>enUS</b> (<code>+0</code>) selon le profil.</li>
+<li><b>Encodage UTF-8</b> (le client Ebonhold — y compris en anglais — affiche bien les accents UTF-8).</li>
+<li><b>MPQ</b> : <code>mpqwrite.py</code> crée des archives MPQ v1 (secteurs zlib) lisibles par le client 3.3.5a, sans dépendance externe.</li>
+<li><b><code>patch-Z.MPQ</code></b> : patch racine chargé après <code>patch-5/6</code>, qu&#x27;il surcharge sans les modifier.</li>
+
+
+
+<h3>Interfaces custom en jeu français</h3>
+
+<p>Certaines interfaces custom d&#x27;Ebonhold (la <b>forge</b> / extraction d&#x27;affixes…) ne s&#x27;ouvraient pas</p>
+<p>quand le jeu était en français : l&#x27;addon du serveur ne reconnaît que le <b>nom anglais</b> du PNJ.</p>
+<p>L&#x27;installateur déploie donc un petit addon compagnon <b><code>EbonholdFRFix</code></b> dans <code>Interface\AddOns\</code></p>
+<p>(hors de <code>Data\</code>, donc <b>à l&#x27;épreuve des mises à jour</b>) qui ré-ouvre la bonne fenêtre quand il</p>
+<p>voit le nom <b>français</b>. Purement additif, sans effet sur un client anglais.</p>
+<p>Le <b>texte interne</b> de ces fenêtres reste en anglais (codé en dur dans l&#x27;addon d&#x27;Ebonhold).</p>
+
+
+
+<h3>Limites</h3>
+
+<li><b>Noms d&#x27;objets / quêtes / PNJ custom</b> : envoyés par le serveur, pas dans un <code>.dbc</code> → restent en anglais.</li>
+<li><b>Noms</b> des sorts/echoes custom : laissés en anglais (cohérence avec les guides) ; seules les <b>descriptions</b> sont traduites.</li>
+<li><b>Texte interne</b> des interfaces custom (forge…) : codé en dur en anglais côté Ebonhold → non traduit (l&#x27;interface s&#x27;ouvre et fonctionne, cf. ci-dessus).</li>
+
+
+
+<h3>Crédits &amp; avertissement</h3>
+
+<p>Réalisé par <b>Squall98</b>. Projet communautaire <b>non officiel</b>, sans affiliation avec Blizzard Entertainment ni Project Ebonhold. Aucun fichier de jeu n&#x27;est redistribué. Sous licence MIT.</p>
+
+<p>&gt; 📖 Pour publier/mettre à jour ce dépôt sur GitHub : <b>[COMMENT-PUBLIER.md](COMMENT-PUBLIER.md)</b>.</p>
+</div></section>
+<script>document.querySelector("nav").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
+document.querySelectorAll("nav button").forEach(x=>x.classList.toggle("actif",x===b));
+document.querySelectorAll("section").forEach(s=>s.classList.toggle("actif",s.id===b.dataset.o));window.scrollTo(0,0);});</script></div></body></html>
